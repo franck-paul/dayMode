@@ -1,8 +1,13 @@
+# SOME DESCRIPTIVE TITLE.
+# This file is put in the public domain.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Dotclear 2 dayMode module\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-07 11:31+0100\n"
+"POT-Creation-Date: 2022-12-07 14:01+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,26 +32,26 @@ msgstr ""
 msgid "dayMode"
 msgstr ""
 
-#: ../git-plugins/dayMode/_prepend.php:67
+#: ../git-plugins/dayMode/inc/admin.behaviors.php:18
 msgid "Daily Archives"
 msgstr ""
 
-#: ../git-plugins/dayMode/_prepend.php:70
+#: ../git-plugins/dayMode/inc/admin.behaviors.php:21
 msgid "Enable daily archives and calendar"
 msgstr ""
 
-#: ../git-plugins/dayMode/_widgets.php:48
+#: ../git-plugins/dayMode/inc/widgets.php:42
 msgid "DayMode: calendar"
 msgstr ""
 
-#: ../git-plugins/dayMode/_widgets.php:48
+#: ../git-plugins/dayMode/inc/widgets.php:42
 msgid "Tickets calendar"
 msgstr ""
 
-#: ../git-plugins/dayMode/_widgets.php:49
+#: ../git-plugins/dayMode/inc/widgets.php:43
 msgid "Calendar"
 msgstr ""
 
-#: ../git-plugins/dayMode/_widgets.php:52
+#: ../git-plugins/dayMode/inc/widgets.php:46
 msgid "First day:"
 msgstr ""
