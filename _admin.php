@@ -18,5 +18,5 @@ __('dayMode') . __('Provides daily archives and an associated calendar widget');
 
 require_once dirname(__FILE__) . '/_widgets.php';
 
-dcCore::app()->addBehavior('adminBlogPreferencesFormV2', ['dayModeBehaviors','adminBlogPreferencesForm']);
-dcCore::app()->addBehavior('adminBeforeBlogSettingsUpdate', ['dayModeBehaviors','adminBeforeBlogSettingsUpdate']);
+dcCore::app()->addBehavior('adminBlogPreferencesFormV2', [dayModeAdminBehaviors::class, 'adminBlogPreferencesForm']);
+dcCore::app()->addBehavior('adminBeforeBlogSettingsUpdate', [dayModeAdminBehaviors::class, 'adminBeforeBlogSettingsUpdate']);

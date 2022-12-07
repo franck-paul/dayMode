@@ -9,9 +9,6 @@
  *
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-if (!defined('DC_RC_PATH')) {
-    return;
-}
 class dcCalendar
 {
     public const SUNDAY_TS = 1042329600;
@@ -19,18 +16,15 @@ class dcCalendar
     protected $base      = null;
     protected $dts       = null;
     protected $post_type = 'post';
+    protected $cday      = 0;
 
     public $weekstart = 0;
 
     public function __construct($post_type = 'post')
     {
-        $this->core      = dcCore::app();
-        $this->blog      = dcCore::app()->blog;
-        $this->con       = dcCore::app()->blog->con;
         $this->post_type = $post_type;
 
-        $year       = $month = '';
-        $this->cday = 0;
+        $year = $month = '';
         if (dcCore::app()->ctx->exists('day')) {
             $month      = dcCore::app()->ctx->day->month();
             $year       = dcCore::app()->ctx->day->year();
@@ -44,7 +38,7 @@ class dcCalendar
             $year   = $recent->year();
         }
 
-        $month_dates = $this->blog->getDates([
+        $month_dates = dcCore::app()->blog->getDates([
             'month'     => $month,
             'year'      => $year,
             'post_type' => $this->post_type,
@@ -57,7 +51,7 @@ class dcCalendar
 
         $this->base = [
             'dt'    => date('Y-m-01 00:00:00', strtotime($month_dates->dt)),
-            'url'   => $month_dates->url($this->core),
+            'url'   => $month_dates->url(dcCore::app()),
             'month' => $month,
             'year'  => $year,
         ];
@@ -69,32 +63,32 @@ class dcCalendar
     {
         $link_next = $link_prev = '';
 
-        $l_next = $this->blog->getDates([
+        $l_next = dcCore::app()->blog->getDates([
             'next'      => $this->base['dt'],
             'type'      => 'month',
             'post_type' => $this->post_type,
         ]);
         if (!$l_next->isEmpty()) {
-            $link_next = ' <a href="' . $l_next->url($this->core) . '" title="' .
-            dt::str('%B %Y', $l_next->ts()) . '">&#187;</a>';
+            $link_next = ' <a href="' . $l_next->url() . '" title="' .
+            dt::str('%B %Y', $l_next->ts()) . '">&nbsp;&#187;&nbsp;</a>';
         }
 
-        $l_prev = $this->blog->getDates([
+        $l_prev = dcCore::app()->blog->getDates([
             'previous'  => $this->base['dt'],
             'type'      => 'month',
             'post_type' => $this->post_type,
         ]);
         if (!$l_prev->isEmpty()) {
-            $link_prev = '<a href="' . $l_prev->url($this->core) . '" title="' .
-            dt::str('%B %Y', $l_prev->ts()) . '">&#171;</a> ';
+            $link_prev = '<a href="' . $l_prev->url() . '" title="' .
+            dt::str('%B %Y', $l_prev->ts()) . '">&nbsp;&#171;&nbsp;</a> ';
         }
 
         $res = '<table>' .
-            '<caption>' .
-            $link_prev .
-            dt::str('%B %Y', $this->base['ts']) .
-            $link_next .
-            '</caption>';
+        '<caption>' .
+        $link_prev .
+        dt::str('%B %Y', $this->base['ts']) .
+        $link_next .
+        '</caption>';
 
         $first_ts = self::SUNDAY_TS + ((int) $this->weekstart * 86400);
         $last_ts  = $first_ts       + (6 * 86400);
