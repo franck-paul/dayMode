@@ -1,5 +1,6 @@
 dayMode 2.0
 * 2.24 compliance
+* Cope with breadcrumb
 
 dayMode 1.1-RC6 - 30-10-2017 - Pierre Van Glabeke
 * suppression summary
