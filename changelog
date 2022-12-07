@@ -1,0 +1,20 @@
+dayMode 1.1-RC6 - 30-10-2017 - Pierre Van Glabeke
+* suppression summary
+* ajout css
+* modifs html
+
+dayMode 1.1-RC5 - 19-07-2015 - Pierre Van Glabeke
+* ajout breadcrumb
+* modifs tpl
+* dc2.8 requis
+
+dayMode 1.1-RC4 - 22-04-2015 - Pierre Van Glabeke
+* modif url support
+* modif tpl (validation html5)
+
+dayMode 1.1-RC3 - 03-02-2015 - Pierre Van Glabeke
+* widget : ajout combo affichage + hors ligne + content_only + class
+* modifs locales
+* ajout tpl currywurst/mustek
+* html5
+* dc2.7 requis
