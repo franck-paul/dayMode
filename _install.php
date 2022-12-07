@@ -1,23 +1,26 @@
 <?php
-# -- BEGIN LICENSE BLOCK ----------------------------------
-#
-# This file is part of dayMode, a plugin for Dotclear 2.
-#
-# Copyright (c) 2006-2015 Pep and contributors
-# Licensed under the GPL version 2.0 license.
-# See LICENSE file or
-# http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
-#
-# -- END LICENSE BLOCK ------------------------------------
-if (!defined('DC_CONTEXT_ADMIN')) return;
-
-$package_version = $core->plugins->moduleInfo('dayMode','version');
-$installed_version = $core->getVersion('dayMode');
-if (version_compare($installed_version,$package_version,'>=')) {
-	return;
+/**
+ * @brief dayMode, a plugin for Dotclear 2
+ *
+ * @package Dotclear
+ * @subpackage Plugins
+ *
+ * @author Pep and contributors
+ *
+ * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
+ */
+if (!defined('DC_CONTEXT_ADMIN')) {
+    return;
 }
 
-$core->blog->settings->addNameSpace('daymode');
-$core->blog->settings->daymode->put('daymode_active',false,'boolean','plugin activation',false,true);
-$core->setVersion('dayMode',$package_version);
+$new_version = dcCore::app()->plugins->moduleInfo('dayMode', 'version');
+$old_version = dcCore::app()->getVersion('dayMode');
+
+if (version_compare((string) $old_version, $new_version, '>=')) {
+    return;
+}
+
+dcCore::app()->blog->settings->addNameSpace('daymode');
+dcCore::app()->blog->settings->daymode->put('daymode_active', false, 'boolean', 'plugin activation', false, true);
+
 return true;

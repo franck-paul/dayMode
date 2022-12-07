@@ -1,17 +1,22 @@
 <?php
-# -- BEGIN LICENSE BLOCK ----------------------------------
-#
-# This file is part of dayMode, a plugin for Dotclear 2.
-#
-# Copyright (c) 2006-2015 Pep and contributors
-# Licensed under the GPL version 2.0 license.
-# See LICENSE file or
-# http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
-#
-# -- END LICENSE BLOCK ------------------------------------
-if (!defined('DC_CONTEXT_ADMIN')) return;
+/**
+ * @brief dayMode, a plugin for Dotclear 2
+ *
+ * @package Dotclear
+ * @subpackage Plugins
+ *
+ * @author Pep and contributors
+ *
+ * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
+ */
+if (!defined('DC_CONTEXT_ADMIN')) {
+    return;
+}
 
-require_once dirname(__FILE__).'/_widgets.php';
+// dead but useful code, in order to have translations
+__('dayMode') . __('Provides daily archives and an associated calendar widget');
 
-$core->addBehavior('adminBlogPreferencesForm',array('dayModeBehaviors','adminBlogPreferencesForm'));
-$core->addBehavior('adminBeforeBlogSettingsUpdate',array('dayModeBehaviors','adminBeforeBlogSettingsUpdate'));
+require_once dirname(__FILE__) . '/_widgets.php';
+
+dcCore::app()->addBehavior('adminBlogPreferencesFormV2', ['dayModeBehaviors','adminBlogPreferencesForm']);
+dcCore::app()->addBehavior('adminBeforeBlogSettingsUpdate', ['dayModeBehaviors','adminBeforeBlogSettingsUpdate']);
