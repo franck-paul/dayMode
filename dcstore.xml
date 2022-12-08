@@ -1,10 +1,10 @@
 <modules xmlns:da="http://dotaddict.org/da/">
   <module id="dayMode">
     <name>dayMode</name>
-    <version>2.0</version>
+    <version>2.1</version>
     <author>Pep and contributors</author>
     <desc>Provides daily archives and an associated calendar widget</desc>
-    <file>https://github.com/franck-paul/dayMode/releases/download/2.0/plugin-dayMode-2.0.zip</file>
+    <file>https://github.com/franck-paul/dayMode/releases/download/2.1/plugin-dayMode-2.1.zip</file>
     <da:dcmin>2.24</da:dcmin>
     <da:details>http://plugins.dotaddict.org/dc2/details/dayMode</da:details>
     <da:support>https://github.com/franck-paul/dayMode</da:support>
