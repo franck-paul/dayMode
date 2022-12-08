@@ -19,3 +19,4 @@ l10n::$locales['DayMode: calendar'] = 'DayMode : calendrier';
 l10n::$locales['Tickets calendar'] = 'Calendrier des billets';
 l10n::$locales['Calendar'] = 'Calendrier';
 l10n::$locales['First day:'] = 'Premier jour de la semaine :';
+l10n::$locales['Archives only'] = 'Archives seulement';

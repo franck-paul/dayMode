@@ -202,7 +202,7 @@ class dcDayTools
             $strReq .= "AND C.cat_url = '" . dcCore::app()->blog->con->escape($params['cat_url']) . "' ";
         }
 
-        $rs = dcCore::app()->blog->con->select($strReq);
+        $rs = new dcRecord(dcCore::app()->blog->con->select($strReq));
         $rs->extend('rsExtDates');
 
         return $rs;

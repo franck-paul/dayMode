@@ -22,7 +22,11 @@ class dayModeWidgets
             return;
         }
 
-        if (($w->homeonly == 1 && !dcCore::app()->url->isHome(dcCore::app()->url->type)) || ($w->homeonly == 2 && dcCore::app()->url->isHome(dcCore::app()->url->type)) || ($w->homeonly == 3 && dcCore::app()->url->type !== 'archive')) {
+        if (!$w->checkHomeOnly(dcCore::app()->url->type)) {
+            return;
+        }
+
+        if ($w->homeonly == 3 && dcCore::app()->url->type !== 'archive') {
             return;
         }
 
@@ -56,7 +60,7 @@ class dayModeWidgets
                     __('Saturday'),
                 ])
             )
-            ->addHomeOnly()
+            ->addHomeOnly([__('Archives only') => 3])
             ->addContentOnly()
             ->addClass()
             ->addOffline();
