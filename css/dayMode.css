@@ -7,12 +7,18 @@
   text-align: center;
   border-collapse: collapse;
 }
+.calendar table caption a {
+  padding-left: 1em;
+  padding-right: 1em;
+}
 .calendar table th {
   text-align: center;
 }
 .calendar table td {
-  text-align: right;
+  text-align: center;
+  padding: 0.125em;
 }
 .calendar table td a {
   font-weight: bold;
+  display: block;
 }
