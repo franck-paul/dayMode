@@ -69,10 +69,10 @@ class dayModePublicBehaviors
                     'unset($today); ' .
                 " ?>\n";
             } else {
-                $p = '<?php if ($_ctx->exists("day")) { ' .
-                    "\$params['post_year'] = \$_ctx->day->year(); " .
-                    "\$params['post_month'] = \$_ctx->day->month(); " .
-                    "\$params['post_day'] = \$_ctx->day->day(); " .
+                $p = '<?php if (dcCore::app()->ctx->exists("day")) { ' .
+                    "\$params['post_year'] = dcCore::app()->ctx->day->year(); " .
+                    "\$params['post_month'] = dcCore::app()->ctx->day->month(); " .
+                    "\$params['post_day'] = dcCore::app()->ctx->day->day(); " .
                     "unset(\$params['limit']); " .
                 "} ?>\n";
             }

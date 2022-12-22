@@ -17,19 +17,19 @@ $this->registerModule(
     'dayMode',
     'Provides daily archives and an associated calendar widget',
     'Pep and contributors',
-    '2.2',
+    '2.3',
     [
         'requires'    => [['core', '2.24']],
         'permissions' => dcCore::app()->auth->makePermissions([
             dcAuth::PERMISSION_ADMIN,
         ]),
-        'type'     => 'plugin',
-        'settings' => [
+        'type'        => 'plugin',
+        'settings'    => [
             'blog' => '#params.daymode',
         ],
 
-        'details'    => 'http://plugins.dotaddict.org/dc2/details/dayMode',
-        'support'    => 'https://github.com/franck-paul/dayMode',
-        'repository' => 'https://raw.githubusercontent.com/franck-paul/dayMode/master/dcstore.xml',
+        'details'     => 'http://plugins.dotaddict.org/dc2/details/dayMode',
+        'support'     => 'https://github.com/franck-paul/dayMode',
+        'repository'  => 'https://raw.githubusercontent.com/franck-paul/dayMode/master/dcstore.xml',
     ]
 );
