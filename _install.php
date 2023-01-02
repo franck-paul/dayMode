@@ -17,7 +17,6 @@ if (!dcCore::app()->newVersion(basename(__DIR__), dcCore::app()->plugins->module
     return;
 }
 
-dcCore::app()->blog->settings->addNameSpace('daymode');
 dcCore::app()->blog->settings->daymode->put('daymode_active', false, 'boolean', 'plugin activation', false, true);
 
 return true;

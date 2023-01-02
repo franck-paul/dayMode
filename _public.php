@@ -19,11 +19,13 @@ if (!dcCore::app()->blog->settings->daymode->daymode_active) {
     return;
 }
 
-dcCore::app()->addBehavior('templateBeforeBlockV2', [dayModePublicBehaviors::class, 'block']);
-dcCore::app()->addBehavior('publicBeforeDocumentV2', [dayModePublicBehaviors::class, 'addTplPath']);
-dcCore::app()->addBehavior('publicHeadContent', [dayModePublicBehaviors::class, 'publicHeadContent']);
-dcCore::app()->addBehavior('publicBreadcrumb', [dayModePublicBehaviors::class, 'publicBreadcrumb']);
-dcCore::app()->addBehavior('publicBreadcrumbExtended', [dayModePublicBehaviors::class, 'publicBreadcrumbExtended']);
+dcCore::app()->addBehaviors([
+    'templateBeforeBlockV2'    => [dayModePublicBehaviors::class, 'block'],
+    'publicBeforeDocumentV2'   => [dayModePublicBehaviors::class, 'addTplPath'],
+    'publicHeadContent'        => [dayModePublicBehaviors::class, 'publicHeadContent'],
+    'publicBreadcrumb'         => [dayModePublicBehaviors::class, 'publicBreadcrumb'],
+    'publicBreadcrumbExtended' => [dayModePublicBehaviors::class, 'publicBreadcrumbExtended'],
+]);
 
 /*
  * Overloads some Archives* dedicated template tags

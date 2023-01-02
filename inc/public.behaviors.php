@@ -13,7 +13,6 @@ class dayModePublicBehaviors
 {
     public static function publicHeadContent()
     {
-        dcCore::app()->blog->settings->addNamespace('daymode');
         if (!(bool) dcCore::app()->blog->settings->daymode->daymode_active) {
             return;
         }

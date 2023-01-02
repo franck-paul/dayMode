@@ -24,8 +24,6 @@ class dayModeAdminBehaviors
 
     public static function adminBeforeBlogSettingsUpdate($settings)
     {
-        $settings->addNameSpace('daymode');
-
         try {
             $settings->daymode->put('daymode_active', !empty($_POST['daymode_active']), 'boolean');
         } catch (Exception $e) {
