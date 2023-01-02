@@ -13,7 +13,7 @@ class dayModeUrl extends dcUrlHandlers
 {
     public static function archive(?string $args): void
     {
-        if (preg_match('|^/([0-9]{4})/([0-9]{2})/([0-9]{2})$|', $args, $m)) {
+        if ($args && (preg_match('|^/([0-9]{4})/([0-9]{2})/([0-9]{2})$|', $args, $m))) {
             $params = [
                 'year'      => $m[1],
                 'month'     => $m[2],
@@ -21,8 +21,10 @@ class dayModeUrl extends dcUrlHandlers
                 'post_type' => 'post',
             ];
 
+            dcCore::app()->callBehavior('publicArchiveBeforeGetDates', $params, $args);
             dcCore::app()->ctx->day = dcCore::app()->blog->getDates($params);
             if (dcCore::app()->ctx->day->isEmpty()) {
+                // There is no entries for the specified day.
                 self::p404();
             }
 
