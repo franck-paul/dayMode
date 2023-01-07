@@ -53,7 +53,7 @@ class dayModePublicBehaviors
 
     public static function block(string $block, ArrayObject $attr): string
     {
-        if ($block == 'Entries') {
+        if ($block === 'Entries') {
             if (!empty($attr['today'])) {
                 $p = '<?php $today = dcDayTools::getEarlierDate(array("ts_type" => "day")); ' .
                     "\$params['post_year'] = \$today->year(); " .
@@ -73,6 +73,7 @@ class dayModePublicBehaviors
 
             return $p;
         }
+
         return '';
     }
 

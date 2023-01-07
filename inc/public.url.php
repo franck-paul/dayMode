@@ -13,7 +13,7 @@ class dayModeUrl extends dcUrlHandlers
 {
     public static function archive(?string $args): void
     {
-        if ($args && (preg_match('|^/([0-9]{4})/([0-9]{2})/([0-9]{2})$|', $args, $m))) {
+        if ($args && (preg_match('|^/([0-9]{4})/([0-9]{2})/([0-9]{2})$|', (string) $args, $m))) {
             $params = [
                 'year'      => $m[1],
                 'month'     => $m[2],
