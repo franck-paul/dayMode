@@ -51,15 +51,10 @@ class dayModePublicBehaviors
         }
     }
 
-    public static function block()
+    public static function block(string $block, ArrayObject $attr): string
     {
-        $args = func_get_args();
-        array_shift($args);
-
-        if ($args[0] === 'Entries') {
-            $attrs = $args[1];
-
-            if (!empty($attrs['today'])) {
+        if ($block == 'Entries') {
+            if (!empty($attr['today'])) {
                 $p = '<?php $today = dcDayTools::getEarlierDate(array("ts_type" => "day")); ' .
                     "\$params['post_year'] = \$today->year(); " .
                     "\$params['post_month'] = \$today->month(); " .
@@ -78,6 +73,7 @@ class dayModePublicBehaviors
 
             return $p;
         }
+        return '';
     }
 
     public static function addTplPath()
