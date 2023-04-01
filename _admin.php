@@ -16,7 +16,7 @@ if (!defined('DC_CONTEXT_ADMIN')) {
 // dead but useful code, in order to have translations
 __('dayMode') . __('Provides daily archives and an associated calendar widget');
 
-require_once dirname(__FILE__) . '/_widgets.php';
+require_once __DIR__ . '/_widgets.php';
 
 dcCore::app()->addBehaviors([
     'adminBlogPreferencesFormV2'    => [dayModeAdminBehaviors::class, 'adminBlogPreferencesForm'],

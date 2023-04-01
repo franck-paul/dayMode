@@ -11,7 +11,7 @@
  */
 class dcCalendar
 {
-    public const SUNDAY_TS = 1042329600;
+    public const SUNDAY_TS = 1_042_329_600;
 
     protected $base      = null;
     protected $dts       = null;

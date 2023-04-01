@@ -9,6 +9,9 @@
  *
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
+
+use Dotclear\Helper\Html\Html;
+
 class dayModeWidgets
 {
     public static function calendar($w)
@@ -33,7 +36,7 @@ class dayModeWidgets
 
         $calendar->weekstart = $w->weekstart;
 
-        $res = ($w->title ? $w->renderTitle(html::escapeHTML($w->title)) : '') .
+        $res = ($w->title ? $w->renderTitle(Html::escapeHTML($w->title)) : '') .
         $calendar->draw();
 
         return $w->renderDiv($w->content_only, join(' ', ['calendar', $w->class]), '', $res);

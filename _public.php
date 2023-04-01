@@ -9,10 +9,6 @@
  *
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-if (!defined('DC_RC_PATH')) {
-    return;
-}
-
 require_once __DIR__ . '/_widgets.php';
 
 if (!dcCore::app()->blog->settings->daymode->daymode_active) {
@@ -36,8 +32,3 @@ dcCore::app()->tpl->addBlock('ArchivesFooter', [dayModeTpl::class, 'ArchivesFoot
 dcCore::app()->tpl->addValue('ArchiveDate', [dayModeTpl::class, 'ArchiveDate']);
 dcCore::app()->tpl->addBlock('ArchiveNext', [dayModeTpl::class, 'ArchiveNext']);
 dcCore::app()->tpl->addBlock('ArchivePrevious', [dayModeTpl::class, 'ArchivePrevious']);
-
-/*
- * Redefines 'archive' urlHandler to plug the new day mode
- */
-dcCore::app()->url->register('archive', 'archive', '^archive(/.+)?$', [dayModeUrl::class, 'archive']);
