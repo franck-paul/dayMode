@@ -1,19 +1,27 @@
 <?php
-/*
+/**
  * @brief dayMode, a plugin for Dotclear 2
  *
  * @package Dotclear
  * @subpackage Plugins
  *
- * @author Pep and contributors
+ * @author Franck Paul and contributors
  *
+ * @copyright Franck Paul carnet.franck.paul@gmail.com
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-class dayModeUrl extends dcUrlHandlers
+declare(strict_types=1);
+
+namespace Dotclear\Plugin\dayMode;
+
+use dcCore;
+use dcUrlHandlers;
+
+class FrontendUrl extends dcUrlHandlers
 {
     public static function archive(?string $args): void
     {
-        if ($args && (preg_match('|^/([0-9]{4})/([0-9]{2})/([0-9]{2})$|', (string) $args, $m))) {
+        if ($args && (preg_match('|^/([0-9]{4})/([0-9]{2})/([0-9]{2})$|', $args, $m))) {
             $params = [
                 'year'      => $m[1],
                 'month'     => $m[2],

@@ -1,24 +1,36 @@
 <?php
-/*
+/**
  * @brief dayMode, a plugin for Dotclear 2
  *
  * @package Dotclear
  * @subpackage Plugins
  *
- * @author Pep and contributors
+ * @author Franck Paul and contributors
  *
+ * @copyright Franck Paul carnet.franck.paul@gmail.com
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-class dayModePublicBehaviors
+declare(strict_types=1);
+
+namespace Dotclear\Plugin\dayMode;
+
+use ArrayObject;
+use dcCore;
+use dcPublic;
+use dcUtils;
+use Dotclear\Helper\Date;
+
+class FrontendBehaviors
 {
     public static function publicHeadContent()
     {
-        if (!(bool) dcCore::app()->blog->settings->daymode->daymode_active) {
+        $settings = dcCore::app()->blog->settings->get(My::id());
+        if (!(bool) $settings->daymode_active) {
             return;
         }
 
         echo
-        dcUtils::cssModuleLoad('dayMode/css/dayMode.css');
+        dcUtils::cssModuleLoad(My::id() . '/css/dayMode.css');
     }
 
     public static function publicBreadcrumbExtended($context)
@@ -38,13 +50,13 @@ class dayModePublicBehaviors
                 } else {
                     // Month archive
                     $ret .= $separator . '<a href="' . dcCore::app()->blog->url . dcCore::app()->url->getURLFor('archive') . '">' . __('Archives') . '</a>';
-                    $ret .= $separator . dt::dt2str('%B %Y', dcCore::app()->ctx->archives->dt);
+                    $ret .= $separator . Date::dt2str('%B %Y', dcCore::app()->ctx->archives->dt);
                 }
             } else {
                 // Day archive
                 $ret .= $separator . '<a href="' . dcCore::app()->blog->url . dcCore::app()->url->getURLFor('archive') . '">' . __('Archives') . '</a>';
-                $ret .= $separator . '<a href="' . dcCore::app()->blog->url . dcCore::app()->url->getURLFor('archive', dt::dt2str('%Y/%m', dcCore::app()->ctx->day->dt)) . '">' . dt::dt2str('%B %Y', dcCore::app()->ctx->day->dt) . '</a>';
-                $ret .= $separator . dt::dt2str('%e', dcCore::app()->ctx->day->dt);
+                $ret .= $separator . '<a href="' . dcCore::app()->blog->url . dcCore::app()->url->getURLFor('archive', Date::dt2str('%Y/%m', dcCore::app()->ctx->day->dt)) . '">' . Date::dt2str('%B %Y', dcCore::app()->ctx->day->dt) . '</a>';
+                $ret .= $separator . Date::dt2str('%e', dcCore::app()->ctx->day->dt);
             }
 
             return $ret;
@@ -55,7 +67,7 @@ class dayModePublicBehaviors
     {
         if ($block === 'Entries') {
             if (!empty($attr['today'])) {
-                $p = '<?php $today = dcDayTools::getEarlierDate(array("ts_type" => "day")); ' .
+                $p = '<?php $today = ' . CoreHelper::class . '::getEarlierDate(array("ts_type" => "day")); ' .
                     "\$params['post_year'] = \$today->year(); " .
                     "\$params['post_month'] = \$today->month(); " .
                     "\$params['post_day'] = \$today->day(); " .
@@ -80,10 +92,10 @@ class dayModePublicBehaviors
     public static function addTplPath()
     {
         $tplset = dcCore::app()->themes->moduleInfo(dcCore::app()->blog->settings->system->theme, 'tplset');
-        if (!empty($tplset) && is_dir(__DIR__ . '/../default-templates/' . $tplset)) {
-            dcCore::app()->tpl->setPath(dcCore::app()->tpl->getPath(), __DIR__ . '/../default-templates/' . $tplset);
+        if (!empty($tplset) && is_dir(My::path() . '/' . dcPublic::TPL_ROOT . '/' . $tplset)) {
+            dcCore::app()->tpl->setPath(dcCore::app()->tpl->getPath(), My::path() . '/' . dcPublic::TPL_ROOT . '/' . $tplset);
         } else {
-            dcCore::app()->tpl->setPath(dcCore::app()->tpl->getPath(), __DIR__ . '/../default-templates/' . DC_DEFAULT_TPLSET);
+            dcCore::app()->tpl->setPath(dcCore::app()->tpl->getPath(), My::path() . '/' . dcPublic::TPL_ROOT . '/' . DC_DEFAULT_TPLSET);
         }
     }
 }

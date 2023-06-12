@@ -1,15 +1,23 @@
 <?php
-/*
+/**
  * @brief dayMode, a plugin for Dotclear 2
  *
  * @package Dotclear
  * @subpackage Plugins
  *
- * @author Pep and contributors
+ * @author Franck Paul and contributors
  *
+ * @copyright Franck Paul carnet.franck.paul@gmail.com
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-class dayModeTpl
+declare(strict_types=1);
+
+namespace Dotclear\Plugin\dayMode;
+
+use dcCore;
+use Dotclear\Helper\Date;
+
+class FrontendTemplate
 {
     public static function ArchivesHeader($attr, $content)
     {
@@ -46,7 +54,7 @@ class dayModeTpl
 
         $f = dcCore::app()->tpl->getFilters($attr);
 
-        return '<?php echo ' . sprintf($f, "dt::dt2str('" . $format . "', dcCore::app()->ctx->" . $trg . '->dt)') . '; ?>';
+        return '<?php echo ' . sprintf($f, Date::class . "::dt2str('" . $format . "', dcCore::app()->ctx->" . $trg . '->dt)') . '; ?>';
     }
 
     public static function ArchiveEntriesCount($attr)

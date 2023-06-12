@@ -5,11 +5,19 @@
  * @package Dotclear
  * @subpackage Plugins
  *
- * @author Pep and contributors
+ * @author Franck Paul and contributors
  *
+ * @copyright Franck Paul carnet.franck.paul@gmail.com
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-class dcCalendar
+declare(strict_types=1);
+
+namespace Dotclear\Plugin\dayMode;
+
+use dcCore;
+use Dotclear\Helper\Date;
+
+class Calendar
 {
     public const SUNDAY_TS = 1_042_329_600;
 
@@ -33,7 +41,7 @@ class dcCalendar
             $month = dcCore::app()->ctx->archives->month();
             $year  = dcCore::app()->ctx->archives->year();
         } else {
-            $recent = dcDayTools::getEarlierDate(['post_type' => $this->post_type]);
+            $recent = CoreHelper::getEarlierDate(['post_type' => $this->post_type]);
             $month  = $recent->month();
             $year   = $recent->year();
         }
@@ -70,7 +78,7 @@ class dcCalendar
         ]);
         if (!$l_next->isEmpty()) {
             $link_next = ' <a href="' . $l_next->url() . '" title="' .
-            dt::str('%B %Y', $l_next->ts()) . '">&nbsp;&#187;&nbsp;</a>';
+            Date::str('%B %Y', $l_next->ts()) . '">&nbsp;&#187;&nbsp;</a>';
         }
 
         $l_prev = dcCore::app()->blog->getDates([
@@ -80,13 +88,13 @@ class dcCalendar
         ]);
         if (!$l_prev->isEmpty()) {
             $link_prev = '<a href="' . $l_prev->url() . '" title="' .
-            dt::str('%B %Y', $l_prev->ts()) . '">&nbsp;&#171;&nbsp;</a> ';
+            Date::str('%B %Y', $l_prev->ts()) . '">&nbsp;&#171;&nbsp;</a> ';
         }
 
         $res = '<table>' .
         '<caption>' .
         $link_prev .
-        dt::str('%B %Y', $this->base['ts']) .
+        Date::str('%B %Y', $this->base['ts']) .
         $link_next .
         '</caption>';
 
@@ -99,8 +107,8 @@ class dcCalendar
 
         $res .= '<thead><tr>';
         for ($j = $first_ts; $j <= $last_ts; $j = $j + 86400) {
-            $res .= '<th scope="col"><abbr title="' . dt::str('%A', $j) . '">' .
-                dt::str('%a', $j) . '</abbr></th>';
+            $res .= '<th scope="col"><abbr title="' . Date::str('%A', $j) . '">' .
+                Date::str('%a', $j) . '</abbr></th>';
         }
 
         $res .= '</tr></thead><tbody>';
@@ -117,7 +125,7 @@ class dcCalendar
             if ($i == $first) {
                 $dstart = true;
             }
-            if ($dstart && !checkdate($m, $d, $y)) {
+            if ($dstart && !checkdate((int) $m, (int) $d, (int) $y)) {
                 $dstart = false;
             }
             if (in_array(sprintf('%4d-%02d-%02d 00:00:00', $y, $m, $d), $this->dts)) {
@@ -148,63 +156,5 @@ class dcCalendar
         $res .= '</tbody></table>';
 
         return $res;
-    }
-}
-
-class dcDayTools
-{
-    public static function getEarlierDate($params = [])
-    {
-        $catReq = '';
-        if (isset($params['ts_type']) && $params['ts_type'] == 'day') {
-            $dt_f = '%Y-%m-%d 00:00:00';
-        } else {
-            $dt_f = '%Y-%m-%d %H:%M:%S';
-        }
-
-        if (!empty($params['cat_id'])) {
-            $catReq = 'AND P.cat_id = ' . (int) $params['cat_id'] . ' ';
-        } elseif (!empty($params['cat_url'])) {
-            $catReq = "AND C.cat_url = '" . dcCore::app()->blog->con->escape($params['cat_url']) . "' ";
-        }
-
-        $strReq = 'SELECT DISTINCT(' . dcCore::app()->blog->con->dateFormat('MAX(post_dt)', $dt_f) . ') AS dt ' .
-                'FROM ' . dcCore::app()->blog->prefix . 'post P LEFT JOIN ' .
-                dcCore::app()->blog->prefix . 'category C ' .
-                'ON P.cat_id = C.cat_id ' .
-                "WHERE P.blog_id = '" . dcCore::app()->blog->con->escape(dcCore::app()->blog->id) . "' " .
-                $catReq;
-
-        if (!dcCore::app()->auth->check('contentadmin', dcCore::app()->blog->id)) {
-            $strReq .= 'AND ((post_status = 1 ';
-
-            if (dcCore::app()->blog->without_password) {
-                $strReq .= 'AND post_password IS NULL ';
-            }
-            $strReq .= ') ';
-
-            if (dcCore::app()->auth->userID()) {
-                $strReq .= "OR P.user_id = '" . dcCore::app()->blog->con->escape(dcCore::app()->auth->userID()) . "')";
-            } else {
-                $strReq .= ') ';
-            }
-        }
-
-        if (!empty($params['post_type'])) {
-            $strReq .= "AND post_type = '" . dcCore::app()->blog->con->escape($params['post_type']) . "' ";
-        }
-
-        if (!empty($params['cat_id'])) {
-            $strReq .= 'AND P.cat_id = ' . (int) $params['cat_id'] . ' ';
-        }
-
-        if (!empty($params['cat_url'])) {
-            $strReq .= "AND C.cat_url = '" . dcCore::app()->blog->con->escape($params['cat_url']) . "' ";
-        }
-
-        $rs = new dcRecord(dcCore::app()->blog->con->select($strReq));
-        $rs->extend('rsExtDates');
-
-        return $rs;
     }
 }
