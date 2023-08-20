@@ -15,21 +15,18 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\dayMode;
 
 use dcCore;
-use dcNsProcess;
+use Dotclear\Core\Process;
 
-class Frontend extends dcNsProcess
+class Frontend extends Process
 {
-    protected static $init = false; /** @deprecated since 2.27 */
     public static function init(): bool
     {
-        static::$init = My::checkContext(My::FRONTEND);
-
-        return static::$init;
+        return self::status(My::checkContext(My::FRONTEND));
     }
 
     public static function process(): bool
     {
-        if (!static::$init) {
+        if (!self::status()) {
             return false;
         }
 
@@ -39,21 +36,21 @@ class Frontend extends dcNsProcess
         }
 
         dcCore::app()->addBehaviors([
-            'templateBeforeBlockV2'    => [FrontendBehaviors::class, 'block'],
-            'publicBeforeDocumentV2'   => [FrontendBehaviors::class, 'addTplPath'],
-            'publicHeadContent'        => [FrontendBehaviors::class, 'publicHeadContent'],
-            'publicBreadcrumb'         => [FrontendBehaviors::class, 'publicBreadcrumb'],
-            'publicBreadcrumbExtended' => [FrontendBehaviors::class, 'publicBreadcrumbExtended'],
+            'templateBeforeBlockV2'    => FrontendBehaviors::block(...),
+            'publicBeforeDocumentV2'   => FrontendBehaviors::addTplPath(...),
+            'publicHeadContent'        => FrontendBehaviors::publicHeadContent(...),
+            'publicBreadcrumb'         => FrontendBehaviors::publicBreadcrumb(...),
+            'publicBreadcrumbExtended' => FrontendBehaviors::publicBreadcrumbExtended(...),
 
-            'initWidgets' => [Widgets::class, 'initWidgets'],
+            'initWidgets' => Widgets::initWidgets(...),
         ]);
 
-        dcCore::app()->tpl->addValue('ArchiveURL', [FrontendTemplate::class, 'ArchiveURL']);
-        dcCore::app()->tpl->addBlock('ArchivesHeader', [FrontendTemplate::class, 'ArchivesHeader']);
-        dcCore::app()->tpl->addBlock('ArchivesFooter', [FrontendTemplate::class, 'ArchivesFooter']);
-        dcCore::app()->tpl->addValue('ArchiveDate', [FrontendTemplate::class, 'ArchiveDate']);
-        dcCore::app()->tpl->addBlock('ArchiveNext', [FrontendTemplate::class, 'ArchiveNext']);
-        dcCore::app()->tpl->addBlock('ArchivePrevious', [FrontendTemplate::class, 'ArchivePrevious']);
+        dcCore::app()->tpl->addValue('ArchiveURL', FrontendTemplate::ArchiveURL(...));
+        dcCore::app()->tpl->addBlock('ArchivesHeader', FrontendTemplate::ArchivesHeader(...));
+        dcCore::app()->tpl->addBlock('ArchivesFooter', FrontendTemplate::ArchivesFooter(...));
+        dcCore::app()->tpl->addValue('ArchiveDate', FrontendTemplate::ArchiveDate(...));
+        dcCore::app()->tpl->addBlock('ArchiveNext', FrontendTemplate::ArchiveNext(...));
+        dcCore::app()->tpl->addBlock('ArchivePrevious', FrontendTemplate::ArchivePrevious(...));
 
         return true;
     }

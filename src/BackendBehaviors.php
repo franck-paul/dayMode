@@ -46,7 +46,7 @@ class BackendBehaviors
 
         try {
             $settings->put('daymode_active', !empty($_POST['daymode_active']), 'boolean');
-        } catch (Exception $e) {
+        } catch (Exception) {
             $settings->drop('daymode_active');
             $settings->put('daymode_active', !empty($_POST['daymode_active']), 'boolean');
         }
