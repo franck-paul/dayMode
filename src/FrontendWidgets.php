@@ -21,7 +21,7 @@ class FrontendWidgets
 {
     public static function calendar($w)
     {
-        $settings = dcCore::app()->blog->settings->get(My::id());
+        $settings = My::settings();
         if (!(bool) $settings->daymode_active) {
             return;
         }

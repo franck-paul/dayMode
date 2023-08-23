@@ -23,7 +23,7 @@ class FrontendBehaviors
 {
     public static function publicHeadContent()
     {
-        $settings = dcCore::app()->blog->settings->get(My::id());
+        $settings = My::settings();
         if (!(bool) $settings->daymode_active) {
             return;
         }

@@ -42,7 +42,7 @@ class Install extends Process
                 }
             }
 
-            $settings = dcCore::app()->blog->settings->get(My::id());
+            $settings = My::settings();
 
             $settings->put('daymode_active', false, dcNamespace::NS_BOOL, 'plugin activation', false, true);
         } catch (Exception $e) {
