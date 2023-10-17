@@ -21,23 +21,26 @@ use Dotclear\Helper\Date;
 
 class FrontendBehaviors
 {
-    public static function publicHeadContent()
+    public static function publicHeadContent(): string
     {
         $settings = My::settings();
         if (!(bool) $settings->daymode_active) {
-            return;
+            return '';
         }
 
         echo
         My::cssLoad('dayMode.css');
+
+        return '';
     }
 
-    public static function publicBreadcrumbExtended($context)
+    public static function publicBreadcrumbExtended(string $context): string
     {
-        return $context === 'archive';
+        // Would like to return a boolean value but behaviors management does not allow that yet.
+        return $context === 'archive' ? '1' : '';
     }
 
-    public static function publicBreadcrumb($context, $separator)
+    public static function publicBreadcrumb(string $context, string $separator): string
     {
         if ($context === 'archive') {
             // Archives
@@ -60,9 +63,17 @@ class FrontendBehaviors
 
             return $ret;
         }
+
+        return '';
     }
 
-    public static function block(string $block, ArrayObject $attr): string
+    /**
+     * @param      string                                               $block  The block
+     * @param      array<string, string>|ArrayObject<string, string>    $attr   The attributes
+     *
+     * @return     string
+     */
+    public static function block(string $block, array|ArrayObject $attr): string
     {
         if ($block === 'Entries') {
             if (!empty($attr['today'])) {
@@ -88,7 +99,7 @@ class FrontendBehaviors
         return '';
     }
 
-    public static function addTplPath()
+    public static function addTplPath(): string
     {
         $tplset = dcCore::app()->themes->moduleInfo(dcCore::app()->blog->settings->system->theme, 'tplset');
         if (!empty($tplset) && is_dir(My::path() . '/' . Utility::TPL_ROOT . '/' . $tplset)) {
@@ -96,5 +107,7 @@ class FrontendBehaviors
         } else {
             dcCore::app()->tpl->setPath(dcCore::app()->tpl->getPath(), My::path() . '/' . Utility::TPL_ROOT . '/' . DC_DEFAULT_TPLSET);
         }
+
+        return '';
     }
 }

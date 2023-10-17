@@ -14,12 +14,19 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\dayMode;
 
+use ArrayObject;
 use dcCore;
 use Dotclear\Helper\Date;
 
 class FrontendTemplate
 {
-    public static function ArchivesHeader($attr, $content)
+    /**
+     * @param      array<string, mixed>|\ArrayObject<string, mixed>  $attr      The attribute
+     * @param      string                                            $content   The content
+     *
+     * @return     string
+     */
+    public static function ArchivesHeader(array|ArrayObject $attr, string $content): string
     {
         $trg = (dcCore::app()->ctx->exists('day')) ? 'day' : 'archives';
 
@@ -29,7 +36,13 @@ class FrontendTemplate
         '<?php endif; ?>';
     }
 
-    public static function ArchivesFooter($attr, $content)
+    /**
+     * @param      array<string, mixed>|\ArrayObject<string, mixed>  $attr      The attribute
+     * @param      string                                            $content   The content
+     *
+     * @return     string
+     */
+    public static function ArchivesFooter(array|ArrayObject $attr, string $content): string
     {
         $trg = (dcCore::app()->ctx->exists('day')) ? 'day' : 'archives';
 
@@ -39,7 +52,12 @@ class FrontendTemplate
         '<?php endif; ?>';
     }
 
-    public static function ArchiveDate($attr)
+    /**
+     * @param      array<string, mixed>|\ArrayObject<string, mixed>  $attr      The attribute
+     *
+     * @return     string
+     */
+    public static function ArchiveDate(array|ArrayObject $attr): string
     {
         if (dcCore::app()->ctx->exists('day')) {
             $trg    = 'day';
@@ -57,7 +75,12 @@ class FrontendTemplate
         return '<?php echo ' . sprintf($f, Date::class . "::dt2str('" . $format . "', dcCore::app()->ctx->" . $trg . '->dt)') . '; ?>';
     }
 
-    public static function ArchiveEntriesCount($attr)
+    /**
+     * @param      array<string, mixed>|\ArrayObject<string, mixed>  $attr      The attribute
+     *
+     * @return     string
+     */
+    public static function ArchiveEntriesCount(array|ArrayObject $attr): string
     {
         $f   = dcCore::app()->tpl->getFilters($attr);
         $trg = (dcCore::app()->ctx->exists('day')) ? 'day' : 'archives';
@@ -65,7 +88,13 @@ class FrontendTemplate
         return '<?php echo ' . sprintf($f, 'dcCore::app()->ctx->' . $trg . '->nb_post') . '; ?>';
     }
 
-    public static function ArchiveNext($attr, $content)
+    /**
+     * @param      array<string, mixed>|\ArrayObject<string, mixed>  $attr      The attribute
+     * @param      string                                            $content   The content
+     *
+     * @return     string
+     */
+    public static function ArchiveNext(array|ArrayObject $attr, string $content): string
     {
         $p   = '$params = array();';
         $trg = (dcCore::app()->ctx->exists('day')) ? 'day' : 'archives';
@@ -94,7 +123,13 @@ class FrontendTemplate
         return $res;
     }
 
-    public static function ArchivePrevious($attr, $content)
+    /**
+     * @param      array<string, mixed>|\ArrayObject<string, mixed>  $attr      The attribute
+     * @param      string                                            $content   The content
+     *
+     * @return     string
+     */
+    public static function ArchivePrevious(array|ArrayObject $attr, string $content): string
     {
         $p   = '$params = array();';
         $trg = (dcCore::app()->ctx->exists('day')) ? 'day' : 'archives';
@@ -123,7 +158,12 @@ class FrontendTemplate
         return $res;
     }
 
-    public static function ArchiveURL($attr)
+    /**
+     * @param      array<string, mixed>|\ArrayObject<string, mixed>  $attr      The attribute
+     *
+     * @return     string
+     */
+    public static function ArchiveURL(array|ArrayObject $attr): string
     {
         $f = dcCore::app()->tpl->getFilters($attr);
 

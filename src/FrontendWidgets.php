@@ -16,26 +16,27 @@ namespace Dotclear\Plugin\dayMode;
 
 use dcCore;
 use Dotclear\Helper\Html\Html;
+use Dotclear\Plugin\widgets\WidgetsElement;
 
 class FrontendWidgets
 {
-    public static function calendar($w)
+    public static function calendar(WidgetsElement $w): string
     {
         $settings = My::settings();
         if (!(bool) $settings->daymode_active) {
-            return;
+            return '';
         }
 
         if ($w->offline) {
-            return;
+            return '';
         }
 
         if (!$w->checkHomeOnly(dcCore::app()->url->type)) {
-            return;
+            return '';
         }
 
         if ($w->homeonly == 3 && dcCore::app()->url->type !== 'archive') {
-            return;
+            return '';
         }
 
         $calendar = new Calendar();

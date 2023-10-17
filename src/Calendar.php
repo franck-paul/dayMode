@@ -21,14 +21,23 @@ class Calendar
 {
     public const SUNDAY_TS = 1_042_329_600;
 
-    protected $base      = null;
-    protected $dts       = null;
-    protected $post_type = 'post';
-    protected $cday      = 0;
+    /**
+     * @var null|array<string, mixed>
+     */
+    protected ?array $base = null;
 
-    public $weekstart = 0;
+    /**
+     * @var null|array<string>
+     */
+    protected ?array $dts = null;
 
-    public function __construct($post_type = 'post')
+    protected string $post_type = 'post';
+
+    protected int $cday = 0;
+
+    public int $weekstart = 0;
+
+    public function __construct(string $post_type = 'post')
     {
         $this->post_type = $post_type;
 
@@ -67,7 +76,7 @@ class Calendar
         $this->base['ts'] = strtotime($this->base['dt']);
     }
 
-    public function draw()
+    public function draw(): string
     {
         $link_next = $link_prev = '';
 

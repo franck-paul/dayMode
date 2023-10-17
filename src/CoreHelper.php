@@ -19,7 +19,14 @@ use Dotclear\Database\MetaRecord;
 
 class CoreHelper
 {
-    public static function getEarlierDate($params = [])
+    /**
+     * Gets the earlier date.
+     *
+     * @param      array<string, string>       $params  The parameters
+     *
+     * @return     MetaRecord
+     */
+    public static function getEarlierDate(array $params = []): MetaRecord
     {
         $catReq = '';
         if (isset($params['ts_type']) && $params['ts_type'] == 'day') {

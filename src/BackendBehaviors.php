@@ -23,23 +23,23 @@ use Exception;
 
 class BackendBehaviors
 {
-    public static function adminBlogPreferencesForm()
+    public static function adminBlogPreferencesForm(): string
     {
-        $settings = My::settings();
-
         echo (new Fieldset('daymode'))
             ->legend(new Legend(__('Daily Archives')))
             ->fields([
                 (new Para())->items([
-                    (new Checkbox('daymode_active', $settings->daymode_active))
+                    (new Checkbox('daymode_active', My::settings()->daymode_active))
                         ->value(1)
                         ->label((new Label(__('Enable daily archives and calendar'), Label::INSIDE_TEXT_AFTER))),
                 ]),
             ])
         ->render();
+
+        return '';
     }
 
-    public static function adminBeforeBlogSettingsUpdate()
+    public static function adminBeforeBlogSettingsUpdate(): string
     {
         $settings = My::settings();
 
@@ -49,5 +49,7 @@ class BackendBehaviors
             $settings->drop('daymode_active');
             $settings->put('daymode_active', !empty($_POST['daymode_active']), 'boolean');
         }
+
+        return '';
     }
 }
