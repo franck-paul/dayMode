@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\dayMode;
 
 use dcCore;
+use Dotclear\App;
 use Dotclear\Helper\Date;
 
 class Calendar
@@ -22,14 +23,14 @@ class Calendar
     public const SUNDAY_TS = 1_042_329_600;
 
     /**
-     * @var null|array<string, mixed>
+     * @var array<string, mixed>
      */
-    protected ?array $base = null;
+    protected array $base;
 
     /**
-     * @var null|array<string>
+     * @var array<string>
      */
-    protected ?array $dts = null;
+    protected array $dts;
 
     protected string $post_type = 'post';
 
@@ -55,7 +56,7 @@ class Calendar
             $year   = $recent->year();
         }
 
-        $month_dates = dcCore::app()->blog->getDates([
+        $month_dates = App::blog()->getDates([
             'month'     => $month,
             'year'      => $year,
             'post_type' => $this->post_type,
@@ -80,7 +81,7 @@ class Calendar
     {
         $link_next = $link_prev = '';
 
-        $l_next = dcCore::app()->blog->getDates([
+        $l_next = App::blog()->getDates([
             'next'      => $this->base['dt'],
             'type'      => 'month',
             'post_type' => $this->post_type,
@@ -90,7 +91,7 @@ class Calendar
             Date::str('%B %Y', $l_next->ts()) . '">&nbsp;&#187;&nbsp;</a>';
         }
 
-        $l_prev = dcCore::app()->blog->getDates([
+        $l_prev = App::blog()->getDates([
             'previous'  => $this->base['dt'],
             'type'      => 'month',
             'post_type' => $this->post_type,

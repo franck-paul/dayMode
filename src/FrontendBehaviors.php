@@ -16,6 +16,7 @@ namespace Dotclear\Plugin\dayMode;
 
 use ArrayObject;
 use dcCore;
+use Dotclear\App;
 use Dotclear\Core\Frontend\Utility;
 use Dotclear\Helper\Date;
 
@@ -44,20 +45,20 @@ class FrontendBehaviors
     {
         if ($context === 'archive') {
             // Archives
-            $ret = '<a id="bc-home" href="' . dcCore::app()->blog->url . '">' . __('Home') . '</a>';
+            $ret = '<a id="bc-home" href="' . App::blog()->url() . '">' . __('Home') . '</a>';
             if (!dcCore::app()->ctx->exists('day')) {
                 if (!dcCore::app()->ctx->archives) {
                     // Global archives
                     $ret .= $separator . __('Archives');
                 } else {
                     // Month archive
-                    $ret .= $separator . '<a href="' . dcCore::app()->blog->url . dcCore::app()->url->getURLFor('archive') . '">' . __('Archives') . '</a>';
+                    $ret .= $separator . '<a href="' . App::blog()->url() . dcCore::app()->url->getURLFor('archive') . '">' . __('Archives') . '</a>';
                     $ret .= $separator . Date::dt2str('%B %Y', dcCore::app()->ctx->archives->dt);
                 }
             } else {
                 // Day archive
-                $ret .= $separator . '<a href="' . dcCore::app()->blog->url . dcCore::app()->url->getURLFor('archive') . '">' . __('Archives') . '</a>';
-                $ret .= $separator . '<a href="' . dcCore::app()->blog->url . dcCore::app()->url->getURLFor('archive', Date::dt2str('%Y/%m', dcCore::app()->ctx->day->dt)) . '">' . Date::dt2str('%B %Y', dcCore::app()->ctx->day->dt) . '</a>';
+                $ret .= $separator . '<a href="' . App::blog()->url() . dcCore::app()->url->getURLFor('archive') . '">' . __('Archives') . '</a>';
+                $ret .= $separator . '<a href="' . App::blog()->url() . dcCore::app()->url->getURLFor('archive', Date::dt2str('%Y/%m', dcCore::app()->ctx->day->dt)) . '">' . Date::dt2str('%B %Y', dcCore::app()->ctx->day->dt) . '</a>';
                 $ret .= $separator . Date::dt2str('%e', dcCore::app()->ctx->day->dt);
             }
 
@@ -101,7 +102,7 @@ class FrontendBehaviors
 
     public static function addTplPath(): string
     {
-        $tplset = dcCore::app()->themes->moduleInfo(dcCore::app()->blog->settings->system->theme, 'tplset');
+        $tplset = dcCore::app()->themes->moduleInfo(App::blog()->settings()->system->theme, 'tplset');
         if (!empty($tplset) && is_dir(My::path() . '/' . Utility::TPL_ROOT . '/' . $tplset)) {
             dcCore::app()->tpl->setPath(dcCore::app()->tpl->getPath(), My::path() . '/' . Utility::TPL_ROOT . '/' . $tplset);
         } else {

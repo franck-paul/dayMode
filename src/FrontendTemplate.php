@@ -16,6 +16,7 @@ namespace Dotclear\Plugin\dayMode;
 
 use ArrayObject;
 use dcCore;
+use Dotclear\App;
 use Dotclear\Helper\Date;
 
 class FrontendTemplate
@@ -61,7 +62,7 @@ class FrontendTemplate
     {
         if (dcCore::app()->ctx->exists('day')) {
             $trg    = 'day';
-            $format = dcCore::app()->blog->settings->system->date_format;
+            $format = App::blog()->settings()->system->date_format;
         } else {
             $trg    = 'archives';
             $format = '%B %Y';
@@ -116,7 +117,7 @@ class FrontendTemplate
 
         $res = "<?php\n";
         $res .= $p;
-        $res .= 'dcCore::app()->ctx->' . $trg . ' = dcCore::app()->blog->getDates($params); unset($params);' . "\n";
+        $res .= 'dcCore::app()->ctx->' . $trg . ' = App::blog()->getDates($params); unset($params);' . "\n";
         $res .= "?>\n";
         $res .= '<?php while (dcCore::app()->ctx->' . $trg . '->fetch()) : ?>' . $content . '<?php endwhile; dcCore::app()->ctx->' . $trg . ' = null; ?>';
 
@@ -151,7 +152,7 @@ class FrontendTemplate
 
         $res = "<?php\n";
         $res .= $p;
-        $res .= 'dcCore::app()->ctx->' . $trg . ' = dcCore::app()->blog->getDates($params); unset($params);' . "\n";
+        $res .= 'dcCore::app()->ctx->' . $trg . ' = App::blog()->getDates($params); unset($params);' . "\n";
         $res .= "?>\n";
         $res .= '<?php while (dcCore::app()->ctx->' . $trg . '->fetch()) : ?>' . $content . '<?php endwhile; dcCore::app()->ctx->' . $trg . ' = null; ?>';
 

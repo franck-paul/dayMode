@@ -16,6 +16,7 @@ namespace Dotclear\Plugin\dayMode;
 
 use dcCore;
 use dcUrlHandlers;
+use Dotclear\App;
 
 class FrontendUrl extends dcUrlHandlers
 {
@@ -30,7 +31,7 @@ class FrontendUrl extends dcUrlHandlers
             ];
 
             dcCore::app()->callBehavior('publicArchiveBeforeGetDates', $params, $args);
-            dcCore::app()->ctx->day = dcCore::app()->blog->getDates($params);
+            dcCore::app()->ctx->day = App::blog()->getDates($params);
             if (dcCore::app()->ctx->day->isEmpty()) {
                 // There is no entries for the specified day.
                 self::p404();
