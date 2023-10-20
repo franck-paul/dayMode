@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\dayMode;
 
-use dcCore;
+use Dotclear\App;
 use Dotclear\Core\Process;
 
 class Frontend extends Process
@@ -35,7 +35,7 @@ class Frontend extends Process
             return false;
         }
 
-        dcCore::app()->addBehaviors([
+        App::behavior()->addBehaviors([
             'templateBeforeBlockV2'    => FrontendBehaviors::block(...),
             'publicBeforeDocumentV2'   => FrontendBehaviors::addTplPath(...),
             'publicHeadContent'        => FrontendBehaviors::publicHeadContent(...),
@@ -45,12 +45,12 @@ class Frontend extends Process
             'initWidgets' => Widgets::initWidgets(...),
         ]);
 
-        dcCore::app()->tpl->addValue('ArchiveURL', FrontendTemplate::ArchiveURL(...));
-        dcCore::app()->tpl->addBlock('ArchivesHeader', FrontendTemplate::ArchivesHeader(...));
-        dcCore::app()->tpl->addBlock('ArchivesFooter', FrontendTemplate::ArchivesFooter(...));
-        dcCore::app()->tpl->addValue('ArchiveDate', FrontendTemplate::ArchiveDate(...));
-        dcCore::app()->tpl->addBlock('ArchiveNext', FrontendTemplate::ArchiveNext(...));
-        dcCore::app()->tpl->addBlock('ArchivePrevious', FrontendTemplate::ArchivePrevious(...));
+        App::frontend()->template()->addValue('ArchiveURL', FrontendTemplate::ArchiveURL(...));
+        App::frontend()->template()->addBlock('ArchivesHeader', FrontendTemplate::ArchivesHeader(...));
+        App::frontend()->template()->addBlock('ArchivesFooter', FrontendTemplate::ArchivesFooter(...));
+        App::frontend()->template()->addValue('ArchiveDate', FrontendTemplate::ArchiveDate(...));
+        App::frontend()->template()->addBlock('ArchiveNext', FrontendTemplate::ArchiveNext(...));
+        App::frontend()->template()->addBlock('ArchivePrevious', FrontendTemplate::ArchivePrevious(...));
 
         return true;
     }

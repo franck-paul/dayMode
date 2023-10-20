@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\dayMode;
 
-use dcCore;
 use Dotclear\App;
 use Dotclear\Database\MetaRecord;
 
@@ -49,7 +48,7 @@ class CoreHelper
                 "WHERE P.blog_id = '" . App::con()->escapeStr(App::blog()->id()) . "' " .
                 $catReq;
 
-        if (!dcCore::app()->auth->check('contentadmin', App::blog()->id())) {
+        if (!App::auth()->check('contentadmin', App::blog()->id())) {
             $strReq .= 'AND ((post_status = 1 ';
 
             if (App::blog()->withoutPassword()) {
@@ -57,8 +56,8 @@ class CoreHelper
             }
             $strReq .= ') ';
 
-            if (dcCore::app()->auth->userID()) {
-                $strReq .= "OR P.user_id = '" . App::con()->escapeStr(dcCore::app()->auth->userID()) . "')";
+            if (App::auth()->userID()) {
+                $strReq .= "OR P.user_id = '" . App::con()->escapeStr(App::auth()->userID()) . "')";
             } else {
                 $strReq .= ') ';
             }

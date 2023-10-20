@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\dayMode;
 
 use ArrayObject;
-use dcCore;
 use Dotclear\App;
 use Dotclear\Helper\Date;
 
@@ -29,10 +28,10 @@ class FrontendTemplate
      */
     public static function ArchivesHeader(array|ArrayObject $attr, string $content): string
     {
-        $trg = (dcCore::app()->ctx->exists('day')) ? 'day' : 'archives';
+        $trg = (App::frontend()->context()->exists('day')) ? 'day' : 'archives';
 
         return
-        '<?php if (dcCore::app()->ctx->' . $trg . '->isStart()) : ?>' .
+        '<?php if (App::frontend()->context()->' . $trg . '->isStart()) : ?>' .
         $content .
         '<?php endif; ?>';
     }
@@ -45,10 +44,10 @@ class FrontendTemplate
      */
     public static function ArchivesFooter(array|ArrayObject $attr, string $content): string
     {
-        $trg = (dcCore::app()->ctx->exists('day')) ? 'day' : 'archives';
+        $trg = (App::frontend()->context()->exists('day')) ? 'day' : 'archives';
 
         return
-        '<?php if (dcCore::app()->ctx->' . $trg . '->isEnd()) : ?>' .
+        '<?php if (App::frontend()->context()->' . $trg . '->isEnd()) : ?>' .
         $content .
         '<?php endif; ?>';
     }
@@ -60,7 +59,7 @@ class FrontendTemplate
      */
     public static function ArchiveDate(array|ArrayObject $attr): string
     {
-        if (dcCore::app()->ctx->exists('day')) {
+        if (App::frontend()->context()->exists('day')) {
             $trg    = 'day';
             $format = App::blog()->settings()->system->date_format;
         } else {
@@ -71,9 +70,9 @@ class FrontendTemplate
             $format = addslashes($attr['format']);
         }
 
-        $f = dcCore::app()->tpl->getFilters($attr);
+        $f = App::frontend()->template()->getFilters($attr);
 
-        return '<?php echo ' . sprintf($f, Date::class . "::dt2str('" . $format . "', dcCore::app()->ctx->" . $trg . '->dt)') . '; ?>';
+        return '<?php echo ' . sprintf($f, Date::class . "::dt2str('" . $format . "', App::frontend()->context()->" . $trg . '->dt)') . '; ?>';
     }
 
     /**
@@ -83,10 +82,10 @@ class FrontendTemplate
      */
     public static function ArchiveEntriesCount(array|ArrayObject $attr): string
     {
-        $f   = dcCore::app()->tpl->getFilters($attr);
-        $trg = (dcCore::app()->ctx->exists('day')) ? 'day' : 'archives';
+        $f   = App::frontend()->template()->getFilters($attr);
+        $trg = (App::frontend()->context()->exists('day')) ? 'day' : 'archives';
 
-        return '<?php echo ' . sprintf($f, 'dcCore::app()->ctx->' . $trg . '->nb_post') . '; ?>';
+        return '<?php echo ' . sprintf($f, 'App::frontend()->context()->' . $trg . '->nb_post') . '; ?>';
     }
 
     /**
@@ -98,7 +97,7 @@ class FrontendTemplate
     public static function ArchiveNext(array|ArrayObject $attr, string $content): string
     {
         $p   = '$params = array();';
-        $trg = (dcCore::app()->ctx->exists('day')) ? 'day' : 'archives';
+        $trg = (App::frontend()->context()->exists('day')) ? 'day' : 'archives';
         if ($trg == 'day') {
             $p .= '$params[\'type\'] = \'day\';' . "\n";
         } else {
@@ -113,13 +112,13 @@ class FrontendTemplate
             $p .= "\$params['post_type'] = '" . addslashes($attr['post_type']) . "';\n";
         }
 
-        $p .= "\$params['next'] = dcCore::app()->ctx->" . $trg . '->dt;';
+        $p .= "\$params['next'] = App::frontend()->context()->" . $trg . '->dt;';
 
         $res = "<?php\n";
         $res .= $p;
-        $res .= 'dcCore::app()->ctx->' . $trg . ' = App::blog()->getDates($params); unset($params);' . "\n";
+        $res .= 'App::frontend()->context()->' . $trg . ' = App::blog()->getDates($params); unset($params);' . "\n";
         $res .= "?>\n";
-        $res .= '<?php while (dcCore::app()->ctx->' . $trg . '->fetch()) : ?>' . $content . '<?php endwhile; dcCore::app()->ctx->' . $trg . ' = null; ?>';
+        $res .= '<?php while (App::frontend()->context()->' . $trg . '->fetch()) : ?>' . $content . '<?php endwhile; App::frontend()->context()->' . $trg . ' = null; ?>';
 
         return $res;
     }
@@ -133,7 +132,7 @@ class FrontendTemplate
     public static function ArchivePrevious(array|ArrayObject $attr, string $content): string
     {
         $p   = '$params = array();';
-        $trg = (dcCore::app()->ctx->exists('day')) ? 'day' : 'archives';
+        $trg = (App::frontend()->context()->exists('day')) ? 'day' : 'archives';
         if ($trg == 'day') {
             $p .= '$params[\'type\'] = \'day\';' . "\n";
         } else {
@@ -148,13 +147,13 @@ class FrontendTemplate
             $p .= "\$params['post_type'] = '" . addslashes($attr['post_type']) . "';\n";
         }
 
-        $p .= "\$params['previous'] = dcCore::app()->ctx->" . $trg . '->dt;';
+        $p .= "\$params['previous'] = App::frontend()->context()->" . $trg . '->dt;';
 
         $res = "<?php\n";
         $res .= $p;
-        $res .= 'dcCore::app()->ctx->' . $trg . ' = App::blog()->getDates($params); unset($params);' . "\n";
+        $res .= 'App::frontend()->context()->' . $trg . ' = App::blog()->getDates($params); unset($params);' . "\n";
         $res .= "?>\n";
-        $res .= '<?php while (dcCore::app()->ctx->' . $trg . '->fetch()) : ?>' . $content . '<?php endwhile; dcCore::app()->ctx->' . $trg . ' = null; ?>';
+        $res .= '<?php while (App::frontend()->context()->' . $trg . '->fetch()) : ?>' . $content . '<?php endwhile; App::frontend()->context()->' . $trg . ' = null; ?>';
 
         return $res;
     }
@@ -166,11 +165,11 @@ class FrontendTemplate
      */
     public static function ArchiveURL(array|ArrayObject $attr): string
     {
-        $f = dcCore::app()->tpl->getFilters($attr);
+        $f = App::frontend()->template()->getFilters($attr);
 
         return
-        '<?php if (dcCore::app()->ctx->exists("day")) { ' .
-        'echo ' . sprintf($f, 'dcCore::app()->ctx->day->url(dcCore::app())') . '; echo "/".dcCore::app()->ctx->day->day(); } ' .
-        'else { echo ' . sprintf($f, 'dcCore::app()->ctx->archives->url(dcCore::app())') . '; } ?>';
+        '<?php if (App::frontend()->context()->exists("day")) { ' .
+        'echo ' . sprintf($f, 'App::frontend()->context()->day->url()') . '; echo "/".App::frontend()->context()->day->day(); } ' .
+        'else { echo ' . sprintf($f, 'App::frontend()->context()->archives->url()') . '; } ?>';
     }
 }

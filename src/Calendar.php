@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\dayMode;
 
-use dcCore;
 use Dotclear\App;
 use Dotclear\Helper\Date;
 
@@ -43,13 +42,13 @@ class Calendar
         $this->post_type = $post_type;
 
         $year = $month = '';
-        if (dcCore::app()->ctx->exists('day')) {
-            $month      = dcCore::app()->ctx->day->month();
-            $year       = dcCore::app()->ctx->day->year();
-            $this->cday = (int) dcCore::app()->ctx->day->day();
-        } elseif (dcCore::app()->ctx->exists('archives')) {
-            $month = dcCore::app()->ctx->archives->month();
-            $year  = dcCore::app()->ctx->archives->year();
+        if (App::frontend()->context()->exists('day')) {
+            $month      = App::frontend()->context()->day->month();
+            $year       = App::frontend()->context()->day->year();
+            $this->cday = (int) App::frontend()->context()->day->day();
+        } elseif (App::frontend()->context()->exists('archives')) {
+            $month = App::frontend()->context()->archives->month();
+            $year  = App::frontend()->context()->archives->year();
         } else {
             $recent = CoreHelper::getEarlierDate(['post_type' => $this->post_type]);
             $month  = $recent->month();
@@ -69,7 +68,7 @@ class Calendar
 
         $this->base = [
             'dt'    => date('Y-m-01 00:00:00', strtotime($month_dates->dt)),
-            'url'   => $month_dates->url(dcCore::app()),
+            'url'   => $month_dates->url(),
             'month' => $month,
             'year'  => $year,
         ];

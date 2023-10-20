@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\dayMode;
 
-use dcCore;
+use Dotclear\App;
 use Dotclear\Helper\Html\Html;
 use Dotclear\Plugin\widgets\WidgetsElement;
 
@@ -31,11 +31,11 @@ class FrontendWidgets
             return '';
         }
 
-        if (!$w->checkHomeOnly(dcCore::app()->url->type)) {
+        if (!$w->checkHomeOnly(App::url()->type)) {
             return '';
         }
 
-        if ($w->homeonly == 3 && dcCore::app()->url->type !== 'archive') {
+        if ($w->homeonly == 3 && App::url()->type !== 'archive') {
             return '';
         }
 

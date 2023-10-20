@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\dayMode;
 
 use ArrayObject;
-use dcCore;
 use Dotclear\App;
 use Dotclear\Core\Frontend\Utility;
 use Dotclear\Helper\Date;
@@ -46,20 +45,20 @@ class FrontendBehaviors
         if ($context === 'archive') {
             // Archives
             $ret = '<a id="bc-home" href="' . App::blog()->url() . '">' . __('Home') . '</a>';
-            if (!dcCore::app()->ctx->exists('day')) {
-                if (!dcCore::app()->ctx->archives) {
+            if (!App::frontend()->context()->exists('day')) {
+                if (!App::frontend()->context()->archives) {
                     // Global archives
                     $ret .= $separator . __('Archives');
                 } else {
                     // Month archive
-                    $ret .= $separator . '<a href="' . App::blog()->url() . dcCore::app()->url->getURLFor('archive') . '">' . __('Archives') . '</a>';
-                    $ret .= $separator . Date::dt2str('%B %Y', dcCore::app()->ctx->archives->dt);
+                    $ret .= $separator . '<a href="' . App::blog()->url() . App::url()->getURLFor('archive') . '">' . __('Archives') . '</a>';
+                    $ret .= $separator . Date::dt2str('%B %Y', App::frontend()->context()->archives->dt);
                 }
             } else {
                 // Day archive
-                $ret .= $separator . '<a href="' . App::blog()->url() . dcCore::app()->url->getURLFor('archive') . '">' . __('Archives') . '</a>';
-                $ret .= $separator . '<a href="' . App::blog()->url() . dcCore::app()->url->getURLFor('archive', Date::dt2str('%Y/%m', dcCore::app()->ctx->day->dt)) . '">' . Date::dt2str('%B %Y', dcCore::app()->ctx->day->dt) . '</a>';
-                $ret .= $separator . Date::dt2str('%e', dcCore::app()->ctx->day->dt);
+                $ret .= $separator . '<a href="' . App::blog()->url() . App::url()->getURLFor('archive') . '">' . __('Archives') . '</a>';
+                $ret .= $separator . '<a href="' . App::blog()->url() . App::url()->getURLFor('archive', Date::dt2str('%Y/%m', App::frontend()->context()->day->dt)) . '">' . Date::dt2str('%B %Y', App::frontend()->context()->day->dt) . '</a>';
+                $ret .= $separator . Date::dt2str('%e', App::frontend()->context()->day->dt);
             }
 
             return $ret;
@@ -86,10 +85,10 @@ class FrontendBehaviors
                     'unset($today); ' .
                 " ?>\n";
             } else {
-                $p = '<?php if (dcCore::app()->ctx->exists("day")) { ' .
-                    "\$params['post_year'] = dcCore::app()->ctx->day->year(); " .
-                    "\$params['post_month'] = dcCore::app()->ctx->day->month(); " .
-                    "\$params['post_day'] = dcCore::app()->ctx->day->day(); " .
+                $p = '<?php if (App::frontend()->context()->exists("day")) { ' .
+                    "\$params['post_year'] = App::frontend()->context()->day->year(); " .
+                    "\$params['post_month'] = App::frontend()->context()->day->month(); " .
+                    "\$params['post_day'] = App::frontend()->context()->day->day(); " .
                     "unset(\$params['limit']); " .
                 "} ?>\n";
             }
@@ -102,11 +101,11 @@ class FrontendBehaviors
 
     public static function addTplPath(): string
     {
-        $tplset = dcCore::app()->themes->moduleInfo(App::blog()->settings()->system->theme, 'tplset');
+        $tplset = App::themes()->moduleInfo(App::blog()->settings()->system->theme, 'tplset');
         if (!empty($tplset) && is_dir(My::path() . '/' . Utility::TPL_ROOT . '/' . $tplset)) {
-            dcCore::app()->tpl->setPath(dcCore::app()->tpl->getPath(), My::path() . '/' . Utility::TPL_ROOT . '/' . $tplset);
+            App::frontend()->template()->setPath(App::frontend()->template()->getPath(), My::path() . '/' . Utility::TPL_ROOT . '/' . $tplset);
         } else {
-            dcCore::app()->tpl->setPath(dcCore::app()->tpl->getPath(), My::path() . '/' . Utility::TPL_ROOT . '/' . DC_DEFAULT_TPLSET);
+            App::frontend()->template()->setPath(App::frontend()->template()->getPath(), My::path() . '/' . Utility::TPL_ROOT . '/' . DC_DEFAULT_TPLSET);
         }
 
         return '';

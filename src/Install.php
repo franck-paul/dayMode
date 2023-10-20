@@ -14,8 +14,6 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\dayMode;
 
-use dcCore;
-use dcNamespace;
 use Dotclear\App;
 use Dotclear\Core\Process;
 use Exception;
@@ -34,20 +32,20 @@ class Install extends Process
         }
 
         try {
-            $old_version = dcCore::app()->getVersion(My::id());
+            $old_version = App::version()->getVersion(My::id());
             if (version_compare((string) $old_version, '3.0', '<')) {
                 // Rename settings namespace
                 if (App::blog()->settings()->exists('daymode')) {
-                    App::blog()->settings()->delNamespace(My::id());
-                    App::blog()->settings()->renNamespace('daymode', My::id());
+                    App::blog()->settings()->delWorkspace(My::id());
+                    App::blog()->settings()->renWorkspace('daymode', My::id());
                 }
             }
 
             $settings = My::settings();
 
-            $settings->put('daymode_active', false, dcNamespace::NS_BOOL, 'plugin activation', false, true);
+            $settings->put('daymode_active', false, App::blogWorkspace()::NS_BOOL, 'plugin activation', false, true);
         } catch (Exception $e) {
-            dcCore::app()->error->add($e->getMessage());
+            App::error()->add($e->getMessage());
         }
 
         return true;

@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\dayMode;
 
-use dcCore;
+use Dotclear\App;
 use Dotclear\Core\Process;
 
 class Prepend extends Process
@@ -30,7 +30,7 @@ class Prepend extends Process
             return false;
         }
 
-        dcCore::app()->url->register('archive', 'archive', '^archive(/.+)?$', FrontendUrl::archive(...));
+        App::url()->register('archive', 'archive', '^archive(/.+)?$', FrontendUrl::archive(...));
 
         return true;
     }
