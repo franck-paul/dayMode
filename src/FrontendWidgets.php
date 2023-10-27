@@ -31,11 +31,11 @@ class FrontendWidgets
             return '';
         }
 
-        if (!$w->checkHomeOnly(App::url()->type)) {
+        if (!$w->checkHomeOnly(App::url()->getType())) {
             return '';
         }
 
-        if ($w->homeonly == 3 && App::url()->type !== 'archive') {
+        if ($w->homeonly == 3 && App::url()->getType() !== 'archive') {
             return '';
         }
 
@@ -46,6 +46,6 @@ class FrontendWidgets
         $res = ($w->title ? $w->renderTitle(Html::escapeHTML($w->title)) : '') .
         $calendar->draw();
 
-        return $w->renderDiv((bool) $w->content_only, join(' ', ['calendar', $w->class]), '', $res);
+        return $w->renderDiv((bool) $w->content_only, implode(' ', ['calendar', $w->class]), '', $res);
     }
 }

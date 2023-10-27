@@ -29,11 +29,7 @@ class CoreHelper
     public static function getEarlierDate(array $params = []): MetaRecord
     {
         $catReq = '';
-        if (isset($params['ts_type']) && $params['ts_type'] == 'day') {
-            $dt_f = '%Y-%m-%d 00:00:00';
-        } else {
-            $dt_f = '%Y-%m-%d %H:%M:%S';
-        }
+        $dt_f = isset($params['ts_type']) && $params['ts_type'] == 'day' ? '%Y-%m-%d 00:00:00' : '%Y-%m-%d %H:%M:%S';
 
         if (!empty($params['cat_id'])) {
             $catReq = 'AND P.cat_id = ' . (int) $params['cat_id'] . ' ';
@@ -54,6 +50,7 @@ class CoreHelper
             if (App::blog()->withoutPassword()) {
                 $strReq .= 'AND post_password IS NULL ';
             }
+
             $strReq .= ') ';
 
             if (App::auth()->userID()) {

@@ -40,8 +40,8 @@ class Calendar
     public function __construct(string $post_type = 'post')
     {
         $this->post_type = $post_type;
-
-        $year = $month = '';
+        $year = '';
+        $month = '';
         if (App::frontend()->context()->exists('day')) {
             $month      = App::frontend()->context()->day->month();
             $year       = App::frontend()->context()->day->year();
@@ -78,8 +78,8 @@ class Calendar
 
     public function draw(): string
     {
-        $link_next = $link_prev = '';
-
+        $link_next = '';
+        $link_prev = '';
         $l_next = App::blog()->getDates([
             'next'      => $this->base['dt'],
             'type'      => 'month',
@@ -100,8 +100,7 @@ class Calendar
             Date::str('%B %Y', $l_prev->ts()) . '">&nbsp;&#171;&nbsp;</a> ';
         }
 
-        $res = '<table>' .
-        '<caption>' .
+        $res = '<table><caption>' .
         $link_prev .
         Date::str('%B %Y', $this->base['ts']) .
         $link_next .
@@ -111,11 +110,11 @@ class Calendar
         $last_ts  = $first_ts       + (6 * 86400);
         $first    = date('w', $this->base['ts']);
         $first    = ($first == 0) ? 7 : $first;
-        $first    = $first - $this->weekstart;
+        $first -= $this->weekstart;
         $limit    = date('t', $this->base['ts']);
 
         $res .= '<thead><tr>';
-        for ($j = $first_ts; $j <= $last_ts; $j = $j + 86400) {
+        for ($j = $first_ts; $j <= $last_ts; $j += 86400) {
             $res .= '<th scope="col"><abbr title="' . Date::str('%A', $j) . '">' .
                 Date::str('%a', $j) . '</abbr></th>';
         }
@@ -131,12 +130,15 @@ class Calendar
             if ($i % 7 == 0) {
                 $res .= '<tr>';
             }
+
             if ($i == $first) {
                 $dstart = true;
             }
+
             if ($dstart && !checkdate((int) $m, (int) $d, (int) $y)) {
                 $dstart = false;
             }
+
             if (in_array(sprintf('%4d-%02d-%02d 00:00:00', $y, $m, $d), $this->dts)) {
                 $url  = $this->base['url'] . '/' . sprintf('%02d', $d);
                 $link = '<a href="' . $url . '">%s</a>';
@@ -156,14 +158,13 @@ class Calendar
                     $i = 42;
                 }
             }
-            $i++;
+
+            ++$i;
             if ($dstart) {
-                $d++;
+                ++$d;
             }
         }
 
-        $res .= '</tbody></table>';
-
-        return $res;
+        return $res . '</tbody></table>';
     }
 }

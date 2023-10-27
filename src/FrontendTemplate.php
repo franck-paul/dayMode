@@ -66,6 +66,7 @@ class FrontendTemplate
             $trg    = 'archives';
             $format = '%B %Y';
         }
+
         if (!empty($attr['format'])) {
             $format = addslashes($attr['format']);
         }
@@ -103,6 +104,7 @@ class FrontendTemplate
         } else {
             $p .= '$params[\'type\'] = \'month\';' . "\n";
         }
+
         if (isset($attr['type'])) {
             $p .= "\$params['type'] = '" . addslashes($attr['type']) . "';\n";
         }
@@ -118,9 +120,8 @@ class FrontendTemplate
         $res .= $p;
         $res .= 'App::frontend()->context()->' . $trg . ' = App::blog()->getDates($params); unset($params);' . "\n";
         $res .= "?>\n";
-        $res .= '<?php while (App::frontend()->context()->' . $trg . '->fetch()) : ?>' . $content . '<?php endwhile; App::frontend()->context()->' . $trg . ' = null; ?>';
 
-        return $res;
+        return $res . ('<?php while (App::frontend()->context()->' . $trg . '->fetch()) : ?>' . $content . '<?php endwhile; App::frontend()->context()->' . $trg . ' = null; ?>');
     }
 
     /**
@@ -138,6 +139,7 @@ class FrontendTemplate
         } else {
             $p .= '$params[\'type\'] = \'month\';' . "\n";
         }
+
         if (isset($attr['type'])) {
             $p .= "\$params['type'] = '" . addslashes($attr['type']) . "';\n";
         }
@@ -153,9 +155,8 @@ class FrontendTemplate
         $res .= $p;
         $res .= 'App::frontend()->context()->' . $trg . ' = App::blog()->getDates($params); unset($params);' . "\n";
         $res .= "?>\n";
-        $res .= '<?php while (App::frontend()->context()->' . $trg . '->fetch()) : ?>' . $content . '<?php endwhile; App::frontend()->context()->' . $trg . ' = null; ?>';
 
-        return $res;
+        return $res . ('<?php while (App::frontend()->context()->' . $trg . '->fetch()) : ?>' . $content . '<?php endwhile; App::frontend()->context()->' . $trg . ' = null; ?>');
     }
 
     /**
@@ -168,8 +169,7 @@ class FrontendTemplate
         $f = App::frontend()->template()->getFilters($attr);
 
         return
-        '<?php if (App::frontend()->context()->exists("day")) { ' .
-        'echo ' . sprintf($f, 'App::frontend()->context()->day->url()') . '; echo "/".App::frontend()->context()->day->day(); } ' .
+        '<?php if (App::frontend()->context()->exists("day")) { echo ' . sprintf($f, 'App::frontend()->context()->day->url()') . '; echo "/".App::frontend()->context()->day->day(); } ' .
         'else { echo ' . sprintf($f, 'App::frontend()->context()->archives->url()') . '; } ?>';
     }
 }
