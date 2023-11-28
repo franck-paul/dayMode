@@ -13,7 +13,7 @@ $this->registerModule(
     'dayMode',
     'Provides daily archives and an associated calendar widget',
     'Pep and contributors',
-    '5.1',
+    '5.1.1',
     [
         'requires'    => [['core', '2.28']],
         'permissions' => 'My',
