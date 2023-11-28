@@ -41,7 +41,7 @@ class FrontendWidgets
 
         $calendar = new Calendar();
 
-        $calendar->weekstart = $w->get('weekstart');
+        $calendar->weekstart = (int) $w->get('weekstart');
 
         $res = ($w->title ? $w->renderTitle(Html::escapeHTML($w->title)) : '') .
         $calendar->draw();
