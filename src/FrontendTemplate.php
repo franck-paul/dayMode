@@ -73,7 +73,7 @@ class FrontendTemplate
 
         $f = App::frontend()->template()->getFilters($attr);
 
-        return '<?php echo ' . sprintf($f, Date::class . "::dt2str('" . $format . "', App::frontend()->context()->" . $trg . '->dt)') . '; ?>';
+        return '<?= ' . sprintf($f, Date::class . "::dt2str('" . $format . "', App::frontend()->context()->" . $trg . '->dt)') . ' ?>';
     }
 
     /**
@@ -86,7 +86,7 @@ class FrontendTemplate
         $f   = App::frontend()->template()->getFilters($attr);
         $trg = (App::frontend()->context()->exists('day')) ? 'day' : 'archives';
 
-        return '<?php echo ' . sprintf($f, 'App::frontend()->context()->' . $trg . '->nb_post') . '; ?>';
+        return '<?= ' . sprintf($f, 'App::frontend()->context()->' . $trg . '->nb_post') . ' ?>';
     }
 
     /**

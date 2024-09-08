@@ -31,16 +31,14 @@ class Calendar
      */
     protected array $dts;
 
-    protected string $post_type = 'post';
-
     protected int $cday = 0;
 
     public int $weekstart = 0;
 
-    public function __construct(string $post_type = 'post')
-    {
-        $this->post_type = $post_type;
-        $year = '';
+    public function __construct(
+        protected string $post_type = 'post'
+    ) {
+        $year  = '';
         $month = '';
         if (App::frontend()->context()->exists('day')) {
             $month      = App::frontend()->context()->day->month();
@@ -80,7 +78,7 @@ class Calendar
     {
         $link_next = '';
         $link_prev = '';
-        $l_next = App::blog()->getDates([
+        $l_next    = App::blog()->getDates([
             'next'      => $this->base['dt'],
             'type'      => 'month',
             'post_type' => $this->post_type,
@@ -111,7 +109,7 @@ class Calendar
         $first    = date('w', $this->base['ts']);
         $first    = ($first == 0) ? 7 : $first;
         $first -= $this->weekstart;
-        $limit    = date('t', $this->base['ts']);
+        $limit = date('t', $this->base['ts']);
 
         $res .= '<thead><tr>';
         for ($j = $first_ts; $j <= $last_ts; $j += 86400) {
