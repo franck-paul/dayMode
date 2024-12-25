@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @brief dayMode, a plugin for Dotclear 2
  *
@@ -68,7 +69,7 @@ class FrontendTemplate
         }
 
         if (!empty($attr['format'])) {
-            $format = addslashes($attr['format']);
+            $format = addslashes((string) $attr['format']);
         }
 
         $f = App::frontend()->template()->getFilters($attr);
@@ -106,12 +107,12 @@ class FrontendTemplate
         }
 
         if (isset($attr['type'])) {
-            $p .= "\$params['type'] = '" . addslashes($attr['type']) . "';\n";
+            $p .= "\$params['type'] = '" . addslashes((string) $attr['type']) . "';\n";
         }
 
         $p .= "\$params['post_type'] = 'post';\n";
         if (isset($attr['post_type'])) {
-            $p .= "\$params['post_type'] = '" . addslashes($attr['post_type']) . "';\n";
+            $p .= "\$params['post_type'] = '" . addslashes((string) $attr['post_type']) . "';\n";
         }
 
         $p .= "\$params['next'] = App::frontend()->context()->" . $trg . '->dt;';
@@ -141,12 +142,12 @@ class FrontendTemplate
         }
 
         if (isset($attr['type'])) {
-            $p .= "\$params['type'] = '" . addslashes($attr['type']) . "';\n";
+            $p .= "\$params['type'] = '" . addslashes((string) $attr['type']) . "';\n";
         }
 
         $p .= "\$params['post_type'] = 'post';\n";
         if (isset($attr['post_type'])) {
-            $p .= "\$params['post_type'] = '" . addslashes($attr['post_type']) . "';\n";
+            $p .= "\$params['post_type'] = '" . addslashes((string) $attr['post_type']) . "';\n";
         }
 
         $p .= "\$params['previous'] = App::frontend()->context()->" . $trg . '->dt;';
