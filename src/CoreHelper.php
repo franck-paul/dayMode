@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @brief dayMode, a plugin for Dotclear 2
  *
@@ -23,13 +24,11 @@ class CoreHelper
      * Gets the earlier date.
      *
      * @param      array<string, string>       $params  The parameters
-     *
-     * @return     MetaRecord
      */
     public static function getEarlierDate(array $params = []): MetaRecord
     {
         $catReq = '';
-        $dt_f = isset($params['ts_type']) && $params['ts_type'] == 'day' ? '%Y-%m-%d 00:00:00' : '%Y-%m-%d %H:%M:%S';
+        $dt_f   = isset($params['ts_type']) && $params['ts_type'] === 'day' ? '%Y-%m-%d 00:00:00' : '%Y-%m-%d %H:%M:%S';
 
         if (!empty($params['cat_id'])) {
             $catReq = 'AND P.cat_id = ' . (int) $params['cat_id'] . ' ';

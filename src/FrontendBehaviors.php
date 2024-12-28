@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @brief dayMode, a plugin for Dotclear 2
  *
@@ -69,8 +70,6 @@ class FrontendBehaviors
     /**
      * @param      string                                               $block  The block
      * @param      array<string, string>|ArrayObject<string, string>    $attr   The attributes
-     *
-     * @return     string
      */
     public static function block(string $block, array|ArrayObject $attr): string
     {

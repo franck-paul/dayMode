@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @brief dayMode, a plugin for Dotclear 2
  *
@@ -104,7 +105,7 @@ class Calendar
         $link_next .
         '</caption>';
 
-        $first_ts = self::SUNDAY_TS + ((int) $this->weekstart * 86400);
+        $first_ts = self::SUNDAY_TS + ($this->weekstart * 86400);
         $last_ts  = $first_ts       + (6 * 86400);
         $first    = date('w', $this->base['ts']);
         $first    = ($first == 0) ? 7 : $first;
@@ -133,7 +134,7 @@ class Calendar
                 $dstart = true;
             }
 
-            if ($dstart && !checkdate((int) $m, (int) $d, (int) $y)) {
+            if ($dstart && !checkdate((int) $m, $d, (int) $y)) {
                 $dstart = false;
             }
 

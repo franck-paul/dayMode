@@ -24,8 +24,6 @@ class FrontendTemplate
     /**
      * @param      array<string, mixed>|\ArrayObject<string, mixed>  $attr      The attribute
      * @param      string                                            $content   The content
-     *
-     * @return     string
      */
     public static function ArchivesHeader(array|ArrayObject $attr, string $content): string
     {
@@ -40,8 +38,6 @@ class FrontendTemplate
     /**
      * @param      array<string, mixed>|\ArrayObject<string, mixed>  $attr      The attribute
      * @param      string                                            $content   The content
-     *
-     * @return     string
      */
     public static function ArchivesFooter(array|ArrayObject $attr, string $content): string
     {
@@ -55,8 +51,6 @@ class FrontendTemplate
 
     /**
      * @param      array<string, mixed>|\ArrayObject<string, mixed>  $attr      The attribute
-     *
-     * @return     string
      */
     public static function ArchiveDate(array|ArrayObject $attr): string
     {
@@ -79,8 +73,6 @@ class FrontendTemplate
 
     /**
      * @param      array<string, mixed>|\ArrayObject<string, mixed>  $attr      The attribute
-     *
-     * @return     string
      */
     public static function ArchiveEntriesCount(array|ArrayObject $attr): string
     {
@@ -93,14 +85,12 @@ class FrontendTemplate
     /**
      * @param      array<string, mixed>|\ArrayObject<string, mixed>  $attr      The attribute
      * @param      string                                            $content   The content
-     *
-     * @return     string
      */
     public static function ArchiveNext(array|ArrayObject $attr, string $content): string
     {
         $p   = '$params = array();';
         $trg = (App::frontend()->context()->exists('day')) ? 'day' : 'archives';
-        if ($trg == 'day') {
+        if ($trg === 'day') {
             $p .= '$params[\'type\'] = \'day\';' . "\n";
         } else {
             $p .= '$params[\'type\'] = \'month\';' . "\n";
@@ -128,14 +118,12 @@ class FrontendTemplate
     /**
      * @param      array<string, mixed>|\ArrayObject<string, mixed>  $attr      The attribute
      * @param      string                                            $content   The content
-     *
-     * @return     string
      */
     public static function ArchivePrevious(array|ArrayObject $attr, string $content): string
     {
         $p   = '$params = array();';
         $trg = (App::frontend()->context()->exists('day')) ? 'day' : 'archives';
-        if ($trg == 'day') {
+        if ($trg === 'day') {
             $p .= '$params[\'type\'] = \'day\';' . "\n";
         } else {
             $p .= '$params[\'type\'] = \'month\';' . "\n";
@@ -162,8 +150,6 @@ class FrontendTemplate
 
     /**
      * @param      array<string, mixed>|\ArrayObject<string, mixed>  $attr      The attribute
-     *
-     * @return     string
      */
     public static function ArchiveURL(array|ArrayObject $attr): string
     {
