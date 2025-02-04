@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @brief dayMode, a plugin for Dotclear 2
  *
@@ -15,6 +16,7 @@ $this->registerModule(
     'Pep and contributors',
     '5.2',
     [
+        'date'        => '2003-08-13T13:42:00+0100',
         'requires'    => [['core', '2.28']],
         'permissions' => 'My',
         'type'        => 'plugin',
