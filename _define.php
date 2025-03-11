@@ -27,5 +27,6 @@ $this->registerModule(
         'details'    => 'http://plugins.dotaddict.org/dc2/details/dayMode',
         'support'    => 'https://github.com/franck-paul/dayMode',
         'repository' => 'https://raw.githubusercontent.com/franck-paul/dayMode/main/dcstore.xml',
+        'license'    => 'gpl2',
     ]
 );

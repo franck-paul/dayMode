@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @brief dayMode, a plugin for Dotclear 2
  *
@@ -27,6 +28,11 @@ class Prepend extends Process
     public static function process(): bool
     {
         if (!self::status()) {
+            return false;
+        }
+
+        $settings = My::settings();
+        if (!(bool) $settings->daymode_active) {
             return false;
         }
 
