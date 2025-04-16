@@ -37,8 +37,8 @@ class Frontend extends Process
         }
 
         App::behavior()->addBehaviors([
-            'templateBeforeBlockV2'    => FrontendBehaviors::block(...),
-            'publicBeforeDocumentV2'   => FrontendBehaviors::addTplPath(...),
+            'templateBeforeBlockV2'    => FrontendBehaviors::templateBeforeBlock(...),
+            'publicBeforeDocumentV2'   => FrontendBehaviors::publicBeforeDocument(...),
             'publicHeadContent'        => FrontendBehaviors::publicHeadContent(...),
             'publicBreadcrumb'         => FrontendBehaviors::publicBreadcrumb(...),
             'publicBreadcrumbExtended' => FrontendBehaviors::publicBreadcrumbExtended(...),

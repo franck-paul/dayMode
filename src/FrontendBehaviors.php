@@ -18,9 +18,20 @@ namespace Dotclear\Plugin\dayMode;
 use ArrayObject;
 use Dotclear\App;
 use Dotclear\Helper\Date;
+use Dotclear\Helper\Html\Form\Link;
+use Dotclear\Helper\Html\Form\Set;
+use Dotclear\Helper\Html\Form\Text;
+use Dotclear\Plugin\TemplateHelper\Code;
 
 class FrontendBehaviors
 {
+    public static function publicBeforeDocument(): string
+    {
+        App::frontend()->template()->appendPath(My::tplPath());
+
+        return '';
+    }
+
     public static function publicHeadContent(): string
     {
         $settings = My::settings();
@@ -44,24 +55,38 @@ class FrontendBehaviors
     {
         if ($context === 'archive') {
             // Archives
-            $ret = '<a id="bc-home" href="' . App::blog()->url() . '">' . __('Home') . '</a>';
+            $parts = [];
+
+            $parts[] = (new Link('bc-home'))
+                ->href(App::blog()->url())
+                ->text(__('Home'));
+
             if (!App::frontend()->context()->exists('day')) {
                 if (!App::frontend()->context()->archives) {
                     // Global archives
-                    $ret .= $separator . __('Archives');
+                    $parts[] = (new Text(null, __('Archives')));
                 } else {
                     // Month archive
-                    $ret .= $separator . '<a href="' . App::blog()->url() . App::url()->getURLFor('archive') . '">' . __('Archives') . '</a>';
-                    $ret .= $separator . Date::dt2str('%B %Y', App::frontend()->context()->archives->dt);
+                    $parts[] = (new Link())
+                        ->href(App::blog()->url() . App::url()->getURLFor('archive'))
+                        ->text(__('Archives'));
+                    $parts[] = (new Text(null, Date::dt2str('%B %Y', App::frontend()->context()->archives->dt)));
                 }
             } else {
                 // Day archive
-                $ret .= $separator . '<a href="' . App::blog()->url() . App::url()->getURLFor('archive') . '">' . __('Archives') . '</a>';
-                $ret .= $separator . '<a href="' . App::blog()->url() . App::url()->getURLFor('archive', Date::dt2str('%Y/%m', App::frontend()->context()->day->dt)) . '">' . Date::dt2str('%B %Y', App::frontend()->context()->day->dt) . '</a>';
-                $ret .= $separator . Date::dt2str('%e', App::frontend()->context()->day->dt);
+                $parts[] = (new Link())
+                    ->href(App::blog()->url() . App::url()->getURLFor('archive'))
+                    ->text(__('Archives'));
+                $parts[] = (new Link())
+                    ->href(App::blog()->url() . App::url()->getURLFor('archive', Date::dt2str('%Y/%m', App::frontend()->context()->day->dt)))
+                    ->text(Date::dt2str('%B %Y', App::frontend()->context()->day->dt));
+                $parts[] = (new Text(null, Date::dt2str('%e', App::frontend()->context()->day->dt)));
             }
 
-            return $ret;
+            return (new Set())
+                ->separator($separator)
+                ->items($parts)
+            ->render();
         }
 
         return '';
@@ -71,36 +96,36 @@ class FrontendBehaviors
      * @param      string                                               $block  The block
      * @param      array<string, string>|ArrayObject<string, string>    $attr   The attributes
      */
-    public static function block(string $block, array|ArrayObject $attr): string
+    public static function templateBeforeBlock(string $block, array|ArrayObject $attr): string
     {
         if ($block === 'Entries') {
-            if (!empty($attr['today'])) {
-                $p = '<?php $today = ' . CoreHelper::class . '::getEarlierDate(array("ts_type" => "day")); ' .
-                    "\$params['post_year'] = \$today->year(); " .
-                    "\$params['post_month'] = \$today->month(); " .
-                    "\$params['post_day'] = \$today->day(); " .
-                    "unset(\$params['limit']); " .
-                    'unset($today); ' .
-                " ?>\n";
-            } else {
-                $p = '<?php if (App::frontend()->context()->exists("day")) { ' .
-                    "\$params['post_year'] = App::frontend()->context()->day->year(); " .
-                    "\$params['post_month'] = App::frontend()->context()->day->month(); " .
-                    "\$params['post_day'] = App::frontend()->context()->day->day(); " .
-                    "unset(\$params['limit']); " .
-                "} ?>\n";
-            }
-
-            return $p;
+            return Code::getPHPCode(
+                self::templateBeforeBlockCode(...),
+                [
+                    !empty($attr['today']),
+                ]
+            );
         }
 
         return '';
     }
 
-    public static function addTplPath(): string
-    {
-        App::frontend()->template()->appendPath(My::tplPath());
+    // Template code methods
 
-        return '';
+    public static function templateBeforeBlockCode(
+        bool $_today_
+    ): void {
+        if ($_today_) {
+            $daymode_today        = \Dotclear\Plugin\dayMode\CoreHelper::getEarlierDate(['ts_type' => 'day']);
+            $params['post_year']  = $daymode_today->year();
+            $params['post_month'] = $daymode_today->month();
+            $params['post_day']   = $daymode_today->day();
+            unset($params['limit'], $daymode_today);
+        } elseif (App::frontend()->context()->exists('day')) {
+            $params['post_year']  = App::frontend()->context()->day->year();
+            $params['post_month'] = App::frontend()->context()->day->month();
+            $params['post_day']   = App::frontend()->context()->day->day();
+            unset($params['limit']);
+        }
     }
 }

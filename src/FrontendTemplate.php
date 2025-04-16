@@ -17,7 +17,7 @@ namespace Dotclear\Plugin\dayMode;
 
 use ArrayObject;
 use Dotclear\App;
-use Dotclear\Helper\Date;
+use Dotclear\Plugin\TemplateHelper\Code;
 
 class FrontendTemplate
 {
@@ -27,12 +27,16 @@ class FrontendTemplate
      */
     public static function ArchivesHeader(array|ArrayObject $attr, string $content): string
     {
-        $trg = (App::frontend()->context()->exists('day')) ? 'day' : 'archives';
+        $attr = $attr instanceof ArrayObject ? $attr : new ArrayObject($attr);
 
-        return
-        '<?php if (App::frontend()->context()->' . $trg . '->isStart()) : ?>' .
-        $content .
-        '<?php endif; ?>';
+        return Code::getPHPTemplateBlockCode(
+            FrontendTemplateCode::ArchivesHeader(...),
+            [
+                App::frontend()->context()->exists('day') ? 'day' : 'archives',
+            ],
+            $content,
+            $attr,
+        );
     }
 
     /**
@@ -41,12 +45,16 @@ class FrontendTemplate
      */
     public static function ArchivesFooter(array|ArrayObject $attr, string $content): string
     {
-        $trg = (App::frontend()->context()->exists('day')) ? 'day' : 'archives';
+        $attr = $attr instanceof ArrayObject ? $attr : new ArrayObject($attr);
 
-        return
-        '<?php if (App::frontend()->context()->' . $trg . '->isEnd()) : ?>' .
-        $content .
-        '<?php endif; ?>';
+        return Code::getPHPTemplateBlockCode(
+            FrontendTemplateCode::ArchivesFooter(...),
+            [
+                App::frontend()->context()->exists('day') ? 'day' : 'archives',
+            ],
+            $content,
+            $attr,
+        );
     }
 
     /**
@@ -54,21 +62,31 @@ class FrontendTemplate
      */
     public static function ArchiveDate(array|ArrayObject $attr): string
     {
-        if (App::frontend()->context()->exists('day')) {
-            $trg    = 'day';
-            $format = App::blog()->settings()->system->date_format;
-        } else {
-            $trg    = 'archives';
-            $format = '%B %Y';
-        }
+        $attr = $attr instanceof ArrayObject ? $attr : new ArrayObject($attr);
+
+        $format = '';
 
         if (!empty($attr['format'])) {
+            // Use given format
             $format = addslashes((string) $attr['format']);
+        } elseif (App::frontend()->context()->exists('day')) {
+            // Use blog settings date format
+            $format = (string) App::blog()->settings()->system->date_format;
         }
 
-        $f = App::frontend()->template()->getFilters($attr);
+        if ($format === '') {
+            // Use default format depending on context
+            $format = App::frontend()->context()->exists('day') ? '%Y-%m-%d' : '%B %Y';
+        }
 
-        return '<?= ' . sprintf($f, Date::class . "::dt2str('" . $format . "', App::frontend()->context()->" . $trg . '->dt)') . ' ?>';
+        return Code::getPHPTemplateValueCode(
+            FrontendTemplateCode::ArchiveDate(...),
+            [
+                App::frontend()->context()->exists('day') ? 'day' : 'archives',
+                $format,
+            ],
+            attr: $attr,
+        );
     }
 
     /**
@@ -76,10 +94,15 @@ class FrontendTemplate
      */
     public static function ArchiveEntriesCount(array|ArrayObject $attr): string
     {
-        $f   = App::frontend()->template()->getFilters($attr);
-        $trg = (App::frontend()->context()->exists('day')) ? 'day' : 'archives';
+        $attr = $attr instanceof ArrayObject ? $attr : new ArrayObject($attr);
 
-        return '<?= ' . sprintf($f, 'App::frontend()->context()->' . $trg . '->nb_post') . ' ?>';
+        return Code::getPHPTemplateValueCode(
+            FrontendTemplateCode::ArchiveEntriesCount(...),
+            [
+                App::frontend()->context()->exists('day') ? 'day' : 'archives',
+            ],
+            attr: $attr,
+        );
     }
 
     /**
@@ -88,31 +111,18 @@ class FrontendTemplate
      */
     public static function ArchiveNext(array|ArrayObject $attr, string $content): string
     {
-        $p   = '$params = array();';
-        $trg = (App::frontend()->context()->exists('day')) ? 'day' : 'archives';
-        if ($trg === 'day') {
-            $p .= '$params[\'type\'] = \'day\';' . "\n";
-        } else {
-            $p .= '$params[\'type\'] = \'month\';' . "\n";
-        }
+        $attr = $attr instanceof ArrayObject ? $attr : new ArrayObject($attr);
 
-        if (isset($attr['type'])) {
-            $p .= "\$params['type'] = '" . addslashes((string) $attr['type']) . "';\n";
-        }
-
-        $p .= "\$params['post_type'] = 'post';\n";
-        if (isset($attr['post_type'])) {
-            $p .= "\$params['post_type'] = '" . addslashes((string) $attr['post_type']) . "';\n";
-        }
-
-        $p .= "\$params['next'] = App::frontend()->context()->" . $trg . '->dt;';
-
-        $res = "<?php\n";
-        $res .= $p;
-        $res .= 'App::frontend()->context()->' . $trg . ' = App::blog()->getDates($params); unset($params);' . "\n";
-        $res .= "?>\n";
-
-        return $res . ('<?php while (App::frontend()->context()->' . $trg . '->fetch()) : ?>' . $content . '<?php endwhile; App::frontend()->context()->' . $trg . ' = null; ?>');
+        return Code::getPHPTemplateBlockCode(
+            FrontendTemplateCode::ArchiveNext(...),
+            [
+                App::frontend()->context()->exists('day') ? 'day' : 'archives',
+                isset($attr['type']) ? addslashes((string) $attr['type']) : (App::frontend()->context()->exists('day') ? 'day' : 'month'),
+                isset($attr['post_type']) ? addslashes((string) $attr['post_type']) : 'post',
+            ],
+            $content,
+            $attr,
+        );
     }
 
     /**
@@ -121,31 +131,18 @@ class FrontendTemplate
      */
     public static function ArchivePrevious(array|ArrayObject $attr, string $content): string
     {
-        $p   = '$params = array();';
-        $trg = (App::frontend()->context()->exists('day')) ? 'day' : 'archives';
-        if ($trg === 'day') {
-            $p .= '$params[\'type\'] = \'day\';' . "\n";
-        } else {
-            $p .= '$params[\'type\'] = \'month\';' . "\n";
-        }
+        $attr = $attr instanceof ArrayObject ? $attr : new ArrayObject($attr);
 
-        if (isset($attr['type'])) {
-            $p .= "\$params['type'] = '" . addslashes((string) $attr['type']) . "';\n";
-        }
-
-        $p .= "\$params['post_type'] = 'post';\n";
-        if (isset($attr['post_type'])) {
-            $p .= "\$params['post_type'] = '" . addslashes((string) $attr['post_type']) . "';\n";
-        }
-
-        $p .= "\$params['previous'] = App::frontend()->context()->" . $trg . '->dt;';
-
-        $res = "<?php\n";
-        $res .= $p;
-        $res .= 'App::frontend()->context()->' . $trg . ' = App::blog()->getDates($params); unset($params);' . "\n";
-        $res .= "?>\n";
-
-        return $res . ('<?php while (App::frontend()->context()->' . $trg . '->fetch()) : ?>' . $content . '<?php endwhile; App::frontend()->context()->' . $trg . ' = null; ?>');
+        return Code::getPHPTemplateBlockCode(
+            FrontendTemplateCode::ArchiveNext(...),
+            [
+                App::frontend()->context()->exists('day') ? 'day' : 'archives',
+                isset($attr['type']) ? addslashes((string) $attr['type']) : (App::frontend()->context()->exists('day') ? 'day' : 'month'),
+                isset($attr['post_type']) ? addslashes((string) $attr['post_type']) : 'post',
+            ],
+            $content,
+            $attr,
+        );
     }
 
     /**
@@ -153,10 +150,11 @@ class FrontendTemplate
      */
     public static function ArchiveURL(array|ArrayObject $attr): string
     {
-        $f = App::frontend()->template()->getFilters($attr);
+        $attr = $attr instanceof ArrayObject ? $attr : new ArrayObject($attr);
 
-        return
-        '<?php if (App::frontend()->context()->exists("day")) { echo ' . sprintf($f, 'App::frontend()->context()->day->url()') . '; echo "/".App::frontend()->context()->day->day(); } ' .
-        'else { echo ' . sprintf($f, 'App::frontend()->context()->archives->url()') . '; } ?>';
+        return Code::getPHPTemplateValueCode(
+            FrontendTemplateCode::ArchiveURL(...),
+            attr: $attr,
+        );
     }
 }

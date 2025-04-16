@@ -16,8 +16,11 @@ $this->registerModule(
     'Pep and contributors',
     '5.3.1',
     [
-        'date'        => '2025-03-11T23:59:04+0100',
-        'requires'    => [['core', '2.28']],
+        'date'     => '2025-03-11T23:59:04+0100',
+        'requires' => [
+            ['core', '2.34'],
+            ['TemplateHelper'],
+        ],
         'permissions' => 'My',
         'type'        => 'plugin',
         'settings'    => [
