@@ -22,7 +22,7 @@ class Widgets
     public static function initWidgets(WidgetsStack $w): string
     {
         $w
-            ->create('calendar', __('DayMode: calendar'), FrontendWidgets::calendar(...), null, __('Tickets calendar'))
+            ->create('calendar', __('DayMode: calendar'), FrontendWidgets::calendar(...), null, __('Tickets calendar'), My::id())
             ->addTitle(__('Calendar'))
             ->setting(
                 'weekstart',
