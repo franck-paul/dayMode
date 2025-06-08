@@ -134,7 +134,7 @@ class FrontendTemplate
         $attr = $attr instanceof ArrayObject ? $attr : new ArrayObject($attr);
 
         return Code::getPHPTemplateBlockCode(
-            FrontendTemplateCode::ArchiveNext(...),
+            FrontendTemplateCode::ArchivePrevious(...),
             [
                 App::frontend()->context()->exists('day') ? 'day' : 'archives',
                 isset($attr['type']) ? addslashes((string) $attr['type']) : (App::frontend()->context()->exists('day') ? 'day' : 'month'),
