@@ -32,11 +32,9 @@ class Prepend extends Process
         }
 
         $settings = My::settings();
-        if (!(bool) $settings->daymode_active) {
-            return false;
+        if ((bool) $settings->daymode_active) {
+            App::url()->register('archive', 'archive', '^archive(/.+)?$', FrontendUrl::archive(...));
         }
-
-        App::url()->register('archive', 'archive', '^archive(/.+)?$', FrontendUrl::archive(...));
 
         return true;
     }
