@@ -17,6 +17,7 @@ namespace Dotclear\Plugin\dayMode;
 
 use Dotclear\App;
 use Dotclear\Database\MetaRecord;
+use Dotclear\Schema\Extension\Dates;
 
 class CoreHelper
 {
@@ -72,7 +73,7 @@ class CoreHelper
         }
 
         $rs = new MetaRecord(App::con()->select($strReq));
-        $rs->extend('rsExtDates');
+        $rs->extend(Dates::class);
 
         return $rs;
     }

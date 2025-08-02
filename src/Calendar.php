@@ -50,8 +50,10 @@ class Calendar
             $year  = App::frontend()->context()->archives->year();
         } else {
             $recent = CoreHelper::getEarlierDate(['post_type' => $this->post_type]);
-            $month  = $recent->month();
-            $year   = $recent->year();
+            if ($recent->count() > 0) {
+                $month = $recent->month();
+                $year  = $recent->year();
+            }
         }
 
         $month_dates = App::blog()->getDates([
