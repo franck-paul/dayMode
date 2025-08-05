@@ -102,7 +102,7 @@ class FrontendBehaviors
             return Code::getPHPCode(
                 self::templateBeforeBlockCode(...),
                 [
-                    !empty($attr['today']),
+                    isset($attr['today']) && $attr['today'] !== '',
                 ]
             );
         }
