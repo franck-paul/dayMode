@@ -14,9 +14,9 @@ $this->registerModule(
     'dayMode',
     'Provides daily archives and an associated calendar widget',
     'Pep and contributors',
-    '6.3',
+    '7.0',
     [
-        'date'     => '2025-08-05T18:22:01+0200',
+        'date'     => '2025-09-06T22:15:26+0200',
         'requires' => [
             ['core', '2.36'],
             ['TemplateHelper'],
