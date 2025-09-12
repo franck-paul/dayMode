@@ -54,7 +54,7 @@ class FrontendTemplateCode
         array $_params_,
         string $_tag_
     ): void {
-        echo \Dotclear\Core\Frontend\Ctx::global_filters(
+        echo App::frontend()->context()::global_filters(
             \Dotclear\Helper\Date::dt2str($_format_, App::frontend()->context()->$_trg_HTML->dt),
             $_params_,
             $_tag_
@@ -71,7 +71,7 @@ class FrontendTemplateCode
         array $_params_,
         string $_tag_
     ): void {
-        echo \Dotclear\Core\Frontend\Ctx::global_filters(
+        echo App::frontend()->context()::global_filters(
             (string) App::frontend()->context()->$_trg_HTML->nb_post,
             $_params_,
             $_tag_
@@ -127,7 +127,7 @@ class FrontendTemplateCode
         array $_params_,
         string $_tag_
     ): void {
-        echo \Dotclear\Core\Frontend\Ctx::global_filters(
+        echo App::frontend()->context()::global_filters(
             App::frontend()->context()->exists('day') ?
             App::frontend()->context()->day->url() . '/' . App::frontend()->context()->day->day() :
             App::frontend()->context()->archives->url(),
