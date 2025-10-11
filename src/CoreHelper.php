@@ -19,6 +19,9 @@ use Dotclear\App;
 use Dotclear\Database\MetaRecord;
 use Dotclear\Schema\Extension\Dates;
 
+/**
+ * @todo switch to SqlStatement
+ */
 class CoreHelper
 {
     /**

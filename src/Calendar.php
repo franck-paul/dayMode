@@ -128,7 +128,7 @@ class Calendar
         $m      = $this->base['month'];
 
         while ($i < 42) {
-            if ($i % 7 == 0) {
+            if ($i % 7 === 0) {
                 $res .= '<tr>';
             }
 
@@ -147,13 +147,13 @@ class Calendar
                 $link = '%s';
             }
 
-            $class = ($this->cday == $d && $dstart) ? ' class="active"' : '';
+            $class = ($this->cday === $d && $dstart) ? ' class="active"' : '';
 
             $res .= '<td' . $class . '>';
             $res .= ($dstart) ? sprintf($link, $d) : ' ';
             $res .= '</td>';
 
-            if (($i + 1) % 7 == 0) {
+            if (($i + 1) % 7 === 0) {
                 $res .= '</tr>';
                 if ($d >= $limit) {
                     $i = 42;
