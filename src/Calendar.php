@@ -8,7 +8,7 @@
  *
  * @author Franck Paul and contributors
  *
- * @copyright Franck Paul carnet.franck.paul@gmail.com
+ * @copyright Franck Paul contact@open-time.net
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
 declare(strict_types=1);
@@ -16,6 +16,7 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\dayMode;
 
 use Dotclear\App;
+use Dotclear\Database\MetaRecord;
 use Dotclear\Helper\Date;
 
 class Calendar
@@ -23,7 +24,7 @@ class Calendar
     public const SUNDAY_TS = 1_042_329_600;
 
     /**
-     * @var array<string, mixed>
+     * @var array{dt: string, url: string, month: string, year: string, ts: int}
      */
     protected array $base;
 
@@ -41,18 +42,19 @@ class Calendar
     ) {
         $year  = '';
         $month = '';
-        if (App::frontend()->context()->exists('day')) {
-            $month      = App::frontend()->context()->day->month();
-            $year       = App::frontend()->context()->day->year();
-            $this->cday = (int) App::frontend()->context()->day->day();
-        } elseif (App::frontend()->context()->exists('archives')) {
-            $month = App::frontend()->context()->archives->month();
-            $year  = App::frontend()->context()->archives->year();
+        if (App::frontend()->context()->exists('day') && App::frontend()->context()->day instanceof MetaRecord) {
+            $month      = is_string($month = App::frontend()->context()->day->month()) ? $month : '';
+            $year       = is_string($year = App::frontend()->context()->day->year()) ? $year : '';
+            $day        = is_numeric($day = App::frontend()->context()->day->day()) ? (int) $day : 0;
+            $this->cday = $day;
+        } elseif (App::frontend()->context()->exists('archives') && App::frontend()->context()->archives instanceof MetaRecord) {
+            $month = is_string($month = App::frontend()->context()->archives->month()) ? $month : '';
+            $year  = is_string($year = App::frontend()->context()->archives->year()) ? $year : '';
         } else {
             $recent = CoreHelper::getEarlierDate(['post_type' => $this->post_type]);
             if ($recent->count() > 0) {
-                $month = $recent->month();
-                $year  = $recent->year();
+                $month = is_string($month = $recent->month()) ? $month : '';
+                $year  = is_string($year = $recent->year()) ? $year : '';
             }
         }
 
@@ -63,18 +65,23 @@ class Calendar
         ]);
 
         $this->dts = [];
+        $dt        = '';
         while ($month_dates->fetch()) {
-            $this->dts[] = $month_dates->dt;
+            $dt = is_string($dt = $month_dates->dt) ? $dt : '';
+            if ($dt !== '') {
+                $this->dts[] = $dt;
+            }
         }
 
+        $url        = is_string($url = $month_dates->url()) ? $url : '';
+        $time       = (int) strtotime($dt);
         $this->base = [
-            'dt'    => date('Y-m-01 00:00:00', (int) strtotime((string) $month_dates->dt)),
-            'url'   => $month_dates->url(),
+            'dt'    => date('Y-m-01 00:00:00', $time),
+            'url'   => $url,
             'month' => $month,
             'year'  => $year,
+            'ts'    => $time,
         ];
-
-        $this->base['ts'] = strtotime($this->base['dt']);
     }
 
     public function draw(): string
@@ -87,8 +94,11 @@ class Calendar
             'post_type' => $this->post_type,
         ]);
         if (!$l_next->isEmpty()) {
-            $link_next = ' <a href="' . $l_next->url() . '" title="' .
-            Date::str('%B %Y', $l_next->ts()) . '">&nbsp;&#187;&nbsp;</a>';
+            $url = is_string($url = $l_next->url()) ? $url : '';
+            $ts  = is_numeric($ts = $l_next->ts()) ? (int) $ts : null;
+            if ($url !== '' && $ts !== null) {
+                $link_next = ' <a href="' . $url . '" title="' . Date::str('%B %Y', $ts) . '">&nbsp;&#187;&nbsp;</a>';
+            }
         }
 
         $l_prev = App::blog()->getDates([
@@ -97,8 +107,11 @@ class Calendar
             'post_type' => $this->post_type,
         ]);
         if (!$l_prev->isEmpty()) {
-            $link_prev = '<a href="' . $l_prev->url() . '" title="' .
-            Date::str('%B %Y', $l_prev->ts()) . '">&nbsp;&#171;&nbsp;</a> ';
+            $url = is_string($url = $l_prev->url()) ? $url : '';
+            $ts  = is_numeric($ts = $l_prev->ts()) ? (int) $ts : null;
+            if ($url !== '' && $ts !== null) {
+                $link_prev = '<a href="' . $url . '" title="' . Date::str('%B %Y', $ts) . '">&nbsp;&#171;&nbsp;</a> ';
+            }
         }
 
         $res = '<table><caption>' .

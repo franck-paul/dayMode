@@ -8,7 +8,7 @@
  *
  * @author Franck Paul and contributors
  *
- * @copyright Franck Paul carnet.franck.paul@gmail.com
+ * @copyright Franck Paul contact@open-time.net
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
 declare(strict_types=1);
@@ -42,7 +42,7 @@ class FrontendWidgets
 
         $calendar = new Calendar();
 
-        $calendar->weekstart = (int) $w->get('weekstart');
+        $calendar->weekstart = is_numeric($w->get('weekstart')) ? (int) $w->get('weekstart') : 0;
 
         $res = ($w->title ? $w->renderTitle(Html::escapeHTML($w->title)) : '') .
         $calendar->draw();

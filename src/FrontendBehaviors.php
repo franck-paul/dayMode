@@ -8,7 +8,7 @@
  *
  * @author Franck Paul and contributors
  *
- * @copyright Franck Paul carnet.franck.paul@gmail.com
+ * @copyright Franck Paul contact@open-time.net
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
 declare(strict_types=1);
@@ -17,6 +17,7 @@ namespace Dotclear\Plugin\dayMode;
 
 use ArrayObject;
 use Dotclear\App;
+use Dotclear\Database\MetaRecord;
 use Dotclear\Helper\Date;
 use Dotclear\Helper\Html\Form\Link;
 use Dotclear\Helper\Html\Form\Set;
@@ -61,26 +62,28 @@ class FrontendBehaviors
                 ->href(App::blog()->url())
                 ->text(__('Home'));
 
-            if (!App::frontend()->context()->exists('day')) {
-                if (!App::frontend()->context()->archives) {
+            if (!App::frontend()->context()->exists('day') || !App::frontend()->context()->day instanceof MetaRecord) {
+                if (!App::frontend()->context()->archives instanceof MetaRecord) {
                     // Global archives
                     $parts[] = (new Text(null, __('Archives')));
                 } else {
+                    $dt = is_string($dt = App::frontend()->context()->archives->dt) ? $dt : '';
                     // Month archive
                     $parts[] = (new Link())
                         ->href(App::blog()->url() . App::url()->getURLFor('archive'))
                         ->text(__('Archives'));
-                    $parts[] = (new Text(null, Date::dt2str('%B %Y', App::frontend()->context()->archives->dt)));
+                    $parts[] = (new Text(null, Date::dt2str('%B %Y', $dt)));
                 }
             } else {
                 // Day archive
+                $dt      = is_string($dt = App::frontend()->context()->day->dt) ? $dt : '';
                 $parts[] = (new Link())
                     ->href(App::blog()->url() . App::url()->getURLFor('archive'))
                     ->text(__('Archives'));
                 $parts[] = (new Link())
-                    ->href(App::blog()->url() . App::url()->getURLFor('archive', Date::dt2str('%Y/%m', App::frontend()->context()->day->dt)))
-                    ->text(Date::dt2str('%B %Y', App::frontend()->context()->day->dt));
-                $parts[] = (new Text(null, Date::dt2str('%e', App::frontend()->context()->day->dt)));
+                    ->href(App::blog()->url() . App::url()->getURLFor('archive', Date::dt2str('%Y/%m', $dt)))
+                    ->text(Date::dt2str('%B %Y', $dt));
+                $parts[] = (new Text(null, Date::dt2str('%e', $dt)));
             }
 
             return (new Set())
@@ -122,7 +125,7 @@ class FrontendBehaviors
             $params['post_day']   = $daymode_today->day();
             $params['limit']      = null;
             unset($params['limit'], $daymode_today);
-        } elseif (App::frontend()->context()->exists('day')) {
+        } elseif (App::frontend()->context()->exists('day') && App::frontend()->context()->day instanceof MetaRecord) {
             $params['post_year']  = App::frontend()->context()->day->year();
             $params['post_month'] = App::frontend()->context()->day->month();
             $params['post_day']   = App::frontend()->context()->day->day();

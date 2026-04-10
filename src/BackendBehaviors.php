@@ -8,7 +8,7 @@
  *
  * @author Franck Paul and contributors
  *
- * @copyright Franck Paul carnet.franck.paul@gmail.com
+ * @copyright Franck Paul contact@open-time.net
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
 declare(strict_types=1);
@@ -30,7 +30,7 @@ class BackendBehaviors
             ->legend(new Legend(__('Daily Archives')))
             ->fields([
                 (new Para())->items([
-                    (new Checkbox('daymode_active', My::settings()->daymode_active))
+                    (new Checkbox('daymode_active', (bool) My::settings()->daymode_active))
                         ->value(1)
                         ->label((new Label(__('Enable daily archives and calendar'), Label::INSIDE_TEXT_AFTER))),
                 ]),

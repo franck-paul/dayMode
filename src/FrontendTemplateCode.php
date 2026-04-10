@@ -8,7 +8,7 @@
  *
  * @author Franck Paul and contributors
  *
- * @copyright Franck Paul carnet.franck.paul@gmail.com
+ * @copyright Franck Paul contact@open-time.net
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
 declare(strict_types=1);
@@ -26,7 +26,7 @@ class FrontendTemplateCode
         string $_trg_HTML,
         string $_content_HTML
     ): void {
-        if (App::frontend()->context()->$_trg_HTML->isStart()) : ?>
+        if (App::frontend()->context()->$_trg_HTML instanceof \Dotclear\Database\MetaRecord && App::frontend()->context()->$_trg_HTML->isStart()) : ?>
             $_content_HTML
         <?php endif;
     }
@@ -38,7 +38,7 @@ class FrontendTemplateCode
         string $_trg_HTML,
         string $_content_HTML
     ): void {
-        if (App::frontend()->context()->$_trg_HTML->isEnd()) : ?>
+        if (App::frontend()->context()->$_trg_HTML instanceof \Dotclear\Database\MetaRecord && App::frontend()->context()->$_trg_HTML->isEnd()) : ?>
             $_content_HTML
         <?php endif;
     }
@@ -54,11 +54,14 @@ class FrontendTemplateCode
         array $_params_,
         string $_tag_
     ): void {
-        echo App::frontend()->context()::global_filters(
-            \Dotclear\Helper\Date::dt2str($_format_, App::frontend()->context()->$_trg_HTML->dt),
-            $_params_,
-            $_tag_
-        );
+        if (App::frontend()->context()->$_trg_HTML instanceof \Dotclear\Database\MetaRecord) {
+            $daymode_dt = is_string($daymode_dt = App::frontend()->context()->$_trg_HTML->dt) ? $daymode_dt : '';
+            echo App::frontend()->context()::global_filters(
+                \Dotclear\Helper\Date::dt2str($_format_, $daymode_dt),
+                $_params_,
+                $_tag_
+            );
+        }
     }
 
     /**
@@ -71,11 +74,15 @@ class FrontendTemplateCode
         array $_params_,
         string $_tag_
     ): void {
-        echo App::frontend()->context()::global_filters(
-            (string) App::frontend()->context()->$_trg_HTML->nb_post,
-            $_params_,
-            $_tag_
-        );
+        if (App::frontend()->context()->$_trg_HTML instanceof \Dotclear\Database\MetaRecord) {
+            $daymode_nb_post = is_string($daymode_nb_post = App::frontend()->context()->$_trg_HTML->nb_post) ? $daymode_nb_post : 0;
+            echo App::frontend()->context()::global_filters(
+                (string) $daymode_nb_post,
+                $_params_,
+                $_tag_
+            );
+            unset($daymode_nb_post);
+        }
     }
 
     /**
@@ -87,15 +94,17 @@ class FrontendTemplateCode
         string $_post_type_,
         string $_content_HTML
     ): void {
-        App::frontend()->context()->$_trg_HTML = App::blog()->getDates([
-            'type'      => $_type_,
-            'post_type' => $_post_type_,
-            'next'      => App::frontend()->context()->$_trg_HTML->dt,
-        ]);
-        while (App::frontend()->context()->$_trg_HTML->fetch()) : ?>
+        if (App::frontend()->context()->$_trg_HTML instanceof \Dotclear\Database\MetaRecord) {
+            App::frontend()->context()->$_trg_HTML = App::blog()->getDates([
+                'type'      => $_type_,
+                'post_type' => $_post_type_,
+                'next'      => App::frontend()->context()->$_trg_HTML->dt,
+            ]);
+            while (App::frontend()->context()->$_trg_HTML->fetch()) : ?>
             $_content_HTML
         <?php endwhile;
-        App::frontend()->context()->$_trg_HTML = null;
+            App::frontend()->context()->$_trg_HTML = null;
+        }
     }
 
     /**
@@ -107,15 +116,17 @@ class FrontendTemplateCode
         string $_post_type_,
         string $_content_HTML
     ): void {
-        App::frontend()->context()->$_trg_HTML = App::blog()->getDates([
-            'type'      => $_type_,
-            'post_type' => $_post_type_,
-            'previous'  => App::frontend()->context()->$_trg_HTML->dt,
-        ]);
-        while (App::frontend()->context()->$_trg_HTML->fetch()) : ?>
+        if (App::frontend()->context()->$_trg_HTML instanceof \Dotclear\Database\MetaRecord) {
+            App::frontend()->context()->$_trg_HTML = App::blog()->getDates([
+                'type'      => $_type_,
+                'post_type' => $_post_type_,
+                'previous'  => App::frontend()->context()->$_trg_HTML->dt,
+            ]);
+            while (App::frontend()->context()->$_trg_HTML->fetch()) : ?>
             $_content_HTML
         <?php endwhile;
-        App::frontend()->context()->$_trg_HTML = null;
+            App::frontend()->context()->$_trg_HTML = null;
+        }
     }
 
     /**
@@ -127,12 +138,28 @@ class FrontendTemplateCode
         array $_params_,
         string $_tag_
     ): void {
-        echo App::frontend()->context()::global_filters(
-            App::frontend()->context()->exists('day') ?
-            App::frontend()->context()->day->url() . '/' . App::frontend()->context()->day->day() :
-            App::frontend()->context()->archives->url(),
-            $_params_,
-            $_tag_
-        );
+        if (App::frontend()->context()->exists('day') && App::frontend()->context()->day instanceof \Dotclear\Database\MetaRecord) {
+            $daymode_url = is_string($daymode_url = App::frontend()->context()->day->url()) ? $daymode_url : '';
+            $daymode_day = is_string($daymode_day = App::frontend()->context()->day->day()) ? $daymode_day : '';
+            if ($daymode_url !== '' && $daymode_day !== '') {
+                echo App::frontend()->context()::global_filters(
+                    $daymode_url . '/' . $daymode_day,
+                    $_params_,
+                    $_tag_
+                );
+            }
+        } else {
+            if (App::frontend()->context()->archives instanceof \Dotclear\Database\MetaRecord) {
+                $archives_url = is_string($archives_url = App::frontend()->context()->archives->url()) ? $archives_url : '';
+                if ($archives_url !== '') {
+                    echo App::frontend()->context()::global_filters(
+                        $archives_url,
+                        $_params_,
+                        $_tag_
+                    );
+                }
+            }
+        }
+        unset($daymode_url, $daymode_day, $archives_url);
     }
 }

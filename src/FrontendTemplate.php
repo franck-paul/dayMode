@@ -8,7 +8,7 @@
  *
  * @author Franck Paul and contributors
  *
- * @copyright Franck Paul carnet.franck.paul@gmail.com
+ * @copyright Franck Paul contact@open-time.net
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
 declare(strict_types=1);
@@ -66,12 +66,12 @@ class FrontendTemplate
 
         $format = '';
 
-        if (!empty($attr['format'])) {
+        if (!empty($attr['format']) && is_string($attr['format'])) {
             // Use given format
-            $format = addslashes((string) $attr['format']);
+            $format = addslashes($attr['format']);
         } elseif (App::frontend()->context()->exists('day')) {
             // Use blog settings date format
-            $format = (string) App::blog()->settings()->system->date_format;
+            $format = is_string($format = App::blog()->settings()->system->date_format) ? $format : '%F';
         }
 
         if ($format === '') {
@@ -117,8 +117,8 @@ class FrontendTemplate
             FrontendTemplateCode::ArchiveNext(...),
             [
                 App::frontend()->context()->exists('day') ? 'day' : 'archives',
-                isset($attr['type']) ? addslashes((string) $attr['type']) : (App::frontend()->context()->exists('day') ? 'day' : 'month'),
-                isset($attr['post_type']) ? addslashes((string) $attr['post_type']) : 'post',
+                isset($attr['type'])      && is_string($attr['type']) ? addslashes($attr['type']) : (App::frontend()->context()->exists('day') ? 'day' : 'month'),
+                isset($attr['post_type']) && is_string($attr['post_type']) ? addslashes($attr['post_type']) : 'post',
             ],
             $content,
             $attr,
@@ -137,8 +137,8 @@ class FrontendTemplate
             FrontendTemplateCode::ArchivePrevious(...),
             [
                 App::frontend()->context()->exists('day') ? 'day' : 'archives',
-                isset($attr['type']) ? addslashes((string) $attr['type']) : (App::frontend()->context()->exists('day') ? 'day' : 'month'),
-                isset($attr['post_type']) ? addslashes((string) $attr['post_type']) : 'post',
+                isset($attr['type'])      && is_string($attr['type']) ? addslashes($attr['type']) : (App::frontend()->context()->exists('day') ? 'day' : 'month'),
+                isset($attr['post_type']) && is_string($attr['post_type']) ? addslashes($attr['post_type']) : 'post',
             ],
             $content,
             $attr,
