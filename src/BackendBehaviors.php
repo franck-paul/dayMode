@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\dayMode;
 
+use Dotclear\App;
 use Dotclear\Helper\Html\Form\Checkbox;
 use Dotclear\Helper\Html\Form\Fieldset;
 use Dotclear\Helper\Html\Form\Label;
@@ -45,10 +46,10 @@ class BackendBehaviors
         $settings = My::settings();
 
         try {
-            $settings->put('daymode_active', !empty($_POST['daymode_active']), 'boolean');
+            $settings->put('daymode_active', !empty($_POST['daymode_active']), App::blogWorkspace()::NS_BOOL);
         } catch (Exception) {
             $settings->drop('daymode_active');
-            $settings->put('daymode_active', !empty($_POST['daymode_active']), 'boolean');
+            $settings->put('daymode_active', !empty($_POST['daymode_active']), App::blogWorkspace()::NS_BOOL);
         }
 
         return '';
