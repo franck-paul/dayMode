@@ -55,9 +55,8 @@ class FrontendTemplateCode
         string $_tag_
     ): void {
         if (App::frontend()->context()->$_trg_HTML instanceof \Dotclear\Database\MetaRecord) {
-            $daymode_dt = is_string($daymode_dt = App::frontend()->context()->$_trg_HTML->dt) ? $daymode_dt : '';
             echo App::frontend()->context()::global_filters(
-                \Dotclear\Helper\Date::dt2str($_format_, $daymode_dt),
+                \Dotclear\Helper\Date::dt2str($_format_, App::frontend()->context()->$_trg_HTML->strField('dt')),
                 $_params_,
                 $_tag_
             );
@@ -75,13 +74,11 @@ class FrontendTemplateCode
         string $_tag_
     ): void {
         if (App::frontend()->context()->$_trg_HTML instanceof \Dotclear\Database\MetaRecord) {
-            $daymode_nb_post = is_string($daymode_nb_post = App::frontend()->context()->$_trg_HTML->nb_post) ? $daymode_nb_post : 0;
             echo App::frontend()->context()::global_filters(
-                (string) $daymode_nb_post,
+                (string) App::frontend()->context()->$_trg_HTML->intField('nb_post'),
                 $_params_,
                 $_tag_
             );
-            unset($daymode_nb_post);
         }
     }
 

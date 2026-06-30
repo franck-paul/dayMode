@@ -67,7 +67,7 @@ class FrontendBehaviors
                     // Global archives
                     $parts[] = (new Text(null, __('Archives')));
                 } else {
-                    $dt = is_string($dt = App::frontend()->context()->archives->dt) ? $dt : '';
+                    $dt = App::frontend()->context()->archives->strField('dt');
                     // Month archive
                     $parts[] = (new Link())
                         ->href(App::blog()->url() . App::url()->getURLFor('archive'))
@@ -76,7 +76,7 @@ class FrontendBehaviors
                 }
             } else {
                 // Day archive
-                $dt      = is_string($dt = App::frontend()->context()->day->dt) ? $dt : '';
+                $dt      = App::frontend()->context()->day->strField('dt');
                 $parts[] = (new Link())
                     ->href(App::blog()->url() . App::url()->getURLFor('archive'))
                     ->text(__('Archives'));
