@@ -67,7 +67,7 @@ class Calendar
         $this->dts = [];
         $dt        = '';
         while ($month_dates->fetch()) {
-            $dt = is_string($dt = $month_dates->dt) ? $dt : '';
+            $dt = $month_dates->strField('dt');
             if ($dt !== '') {
                 $this->dts[] = $dt;
             }
