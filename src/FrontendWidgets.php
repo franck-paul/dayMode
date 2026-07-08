@@ -24,7 +24,7 @@ class FrontendWidgets
     public static function calendar(WidgetsElement $w): string
     {
         $settings = My::settings();
-        if (!(bool) $settings->daymode_active) {
+        if (!$settings->getBool('daymode_active')) {
             return '';
         }
 

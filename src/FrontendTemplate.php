@@ -71,12 +71,12 @@ class FrontendTemplate
             $format = addslashes($attr['format']);
         } elseif (App::frontend()->context()->exists('day')) {
             // Use blog settings date format
-            $format = is_string($format = App::blog()->settings()->system->date_format) ? $format : '%F';
+            $format = App::blog()->settings()->get('system')->getStr('date_format', false) ?: '%F';
         }
 
         if ($format === '') {
-            // Use default format depending on context
-            $format = App::frontend()->context()->exists('day') ? '%Y-%m-%d' : '%B %Y';
+            // Use default format
+            $format = '%B %Y';
         }
 
         return Code::getPHPTemplateValueCode(

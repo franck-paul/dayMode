@@ -34,7 +34,7 @@ class Prepend
         }
 
         $settings = My::settings();
-        if ((bool) $settings->daymode_active) {
+        if ($settings->getBool('daymode_active')) {
             App::url()->register('archive', 'archive', '^archive(/.+)?$', FrontendUrl::archive(...));
         }
 

@@ -31,7 +31,7 @@ class BackendBehaviors
             ->legend(new Legend(__('Daily Archives')))
             ->fields([
                 (new Para())->items([
-                    (new Checkbox('daymode_active', (bool) My::settings()->daymode_active))
+                    (new Checkbox('daymode_active', My::settings()->getBool('daymode_active', false)))
                         ->value(1)
                         ->label((new Label(__('Enable daily archives and calendar'), Label::INSIDE_TEXT_AFTER))),
                 ]),

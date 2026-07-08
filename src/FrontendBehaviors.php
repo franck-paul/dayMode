@@ -36,7 +36,7 @@ class FrontendBehaviors
     public static function publicHeadContent(): string
     {
         $settings = My::settings();
-        if (!(bool) $settings->daymode_active) {
+        if (!$settings->getBool('daymode_active')) {
             return '';
         }
 
