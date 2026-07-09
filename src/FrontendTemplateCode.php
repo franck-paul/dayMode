@@ -95,7 +95,7 @@ class FrontendTemplateCode
             App::frontend()->context()->$_trg_HTML = App::blog()->getDates([
                 'type'      => $_type_,
                 'post_type' => $_post_type_,
-                'next'      => App::frontend()->context()->$_trg_HTML->dt,
+                'next'      => App::frontend()->context()->$_trg_HTML->strField('dt'),
             ]);
             while (App::frontend()->context()->$_trg_HTML->fetch()) : ?>
             $_content_HTML
@@ -117,7 +117,7 @@ class FrontendTemplateCode
             App::frontend()->context()->$_trg_HTML = App::blog()->getDates([
                 'type'      => $_type_,
                 'post_type' => $_post_type_,
-                'previous'  => App::frontend()->context()->$_trg_HTML->dt,
+                'previous'  => App::frontend()->context()->$_trg_HTML->strField('dt'),
             ]);
             while (App::frontend()->context()->$_trg_HTML->fetch()) : ?>
             $_content_HTML
