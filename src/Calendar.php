@@ -43,18 +43,18 @@ class Calendar
         $year  = '';
         $month = '';
         if (App::frontend()->context()->exists('day') && App::frontend()->context()->day instanceof MetaRecord) {
-            $month      = is_string($month = App::frontend()->context()->day->month()) ? $month : '';
-            $year       = is_string($year = App::frontend()->context()->day->year()) ? $year : '';
+            $month      = App::frontend()->context()->day->month();
+            $year       = App::frontend()->context()->day->year();
             $day        = is_numeric($day = App::frontend()->context()->day->day()) ? (int) $day : 0;
             $this->cday = $day;
         } elseif (App::frontend()->context()->exists('archives') && App::frontend()->context()->archives instanceof MetaRecord) {
-            $month = is_string($month = App::frontend()->context()->archives->month()) ? $month : '';
-            $year  = is_string($year = App::frontend()->context()->archives->year()) ? $year : '';
+            $month = App::frontend()->context()->archives->month();
+            $year  = App::frontend()->context()->archives->year();
         } else {
             $recent = CoreHelper::getEarlierDate(['post_type' => $this->post_type]);
             if ($recent->count() > 0) {
-                $month = is_string($month = $recent->month()) ? $month : '';
-                $year  = is_string($year = $recent->year()) ? $year : '';
+                $month = $recent->month();
+                $year  = $recent->year();
             }
         }
 
@@ -73,7 +73,7 @@ class Calendar
             }
         }
 
-        $url        = is_string($url = $month_dates->url()) ? $url : '';
+        $url        = $month_dates->url();
         $time       = (int) strtotime((string) $dt);
         $this->base = [
             'dt'    => date('Y-m-01 00:00:00', $time),
@@ -94,9 +94,9 @@ class Calendar
             'post_type' => $this->post_type,
         ]);
         if (!$l_next->isEmpty()) {
-            $url = is_string($url = $l_next->url()) ? $url : '';
-            $ts  = is_numeric($ts = $l_next->ts()) ? (int) $ts : null;
-            if ($url !== '' && $ts !== null) {
+            $url = $l_next->url();
+            $ts  = $l_next->ts();
+            if ($url !== '' && $ts !== 0) {
                 $link_next = ' <a href="' . $url . '" title="' . Date::str('%B %Y', $ts) . '">&nbsp;&#187;&nbsp;</a>';
             }
         }
@@ -107,9 +107,9 @@ class Calendar
             'post_type' => $this->post_type,
         ]);
         if (!$l_prev->isEmpty()) {
-            $url = is_string($url = $l_prev->url()) ? $url : '';
-            $ts  = is_numeric($ts = $l_prev->ts()) ? (int) $ts : null;
-            if ($url !== '' && $ts !== null) {
+            $url = $l_prev->url();
+            $ts  = $l_prev->ts();
+            if ($url !== '' && $ts !== 0) {
                 $link_prev = '<a href="' . $url . '" title="' . Date::str('%B %Y', $ts) . '">&nbsp;&#171;&nbsp;</a> ';
             }
         }

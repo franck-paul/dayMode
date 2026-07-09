@@ -136,8 +136,8 @@ class FrontendTemplateCode
         string $_tag_
     ): void {
         if (App::frontend()->context()->exists('day') && App::frontend()->context()->day instanceof \Dotclear\Database\MetaRecord) {
-            $daymode_url = is_string($daymode_url = App::frontend()->context()->day->url()) ? $daymode_url : '';
-            $daymode_day = is_string($daymode_day = App::frontend()->context()->day->day()) ? $daymode_day : '';
+            $daymode_url = App::frontend()->context()->day->url();
+            $daymode_day = App::frontend()->context()->day->day();
             if ($daymode_url !== '' && $daymode_day !== '') {
                 echo App::frontend()->context()::global_filters(
                     $daymode_url . '/' . $daymode_day,
@@ -147,7 +147,7 @@ class FrontendTemplateCode
             }
         } else {
             if (App::frontend()->context()->archives instanceof \Dotclear\Database\MetaRecord) {
-                $archives_url = is_string($archives_url = App::frontend()->context()->archives->url()) ? $archives_url : '';
+                $archives_url = App::frontend()->context()->archives->url();
                 if ($archives_url !== '') {
                     echo App::frontend()->context()::global_filters(
                         $archives_url,
