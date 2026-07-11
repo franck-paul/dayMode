@@ -36,7 +36,7 @@ class FrontendWidgets
             return '';
         }
 
-        if ($w->homeonly == 3 && App::url()->getType() !== 'archive') {
+        if ($w->homeonly == 3 && !App::url()->isType('archive')) {
             return '';
         }
 
