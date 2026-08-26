@@ -21,6 +21,9 @@ use Dotclear\Helper\Date;
 
 class Calendar
 {
+    /**
+     * @var int SUNDAY_TS
+     */
     public const SUNDAY_TS = 1_042_329_600;
 
     /**
