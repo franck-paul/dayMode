@@ -75,9 +75,9 @@ class CoreHelper
             $strReq .= "AND C.cat_url = '" . App::db()->con()->escapeStr($params['cat_url']) . "' ";
         }
 
-        $rs = new MetaRecord(App::db()->con()->select($strReq));
-        $rs->extend(Dates::class);
+        $metaRecord = new MetaRecord(App::db()->con()->select($strReq));
+        $metaRecord->extend(Dates::class);
 
-        return $rs;
+        return $metaRecord;
     }
 }

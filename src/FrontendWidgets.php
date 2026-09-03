@@ -21,32 +21,32 @@ use Dotclear\Plugin\widgets\WidgetsElement;
 
 class FrontendWidgets
 {
-    public static function calendar(WidgetsElement $w): string
+    public static function calendar(WidgetsElement $widgetsElement): string
     {
         $settings = My::settings();
         if (!$settings->getBool('daymode_active')) {
             return '';
         }
 
-        if ($w->offline) {
+        if ($widgetsElement->offline) {
             return '';
         }
 
-        if (!$w->checkHomeOnly(App::url()->getType())) {
+        if (!$widgetsElement->checkHomeOnly(App::url()->getType())) {
             return '';
         }
 
-        if ($w->homeonly == 3 && !App::url()->isType('archive')) {
+        if ($widgetsElement->homeonly == 3 && !App::url()->isType('archive')) {
             return '';
         }
 
         $calendar = new Calendar();
 
-        $calendar->weekstart = is_numeric($w->get('weekstart')) ? (int) $w->get('weekstart') : 0;
+        $calendar->weekstart = is_numeric($widgetsElement->get('weekstart')) ? (int) $widgetsElement->get('weekstart') : 0;
 
-        $res = ($w->title ? $w->renderTitle(Html::escapeHTML($w->title)) : '') .
+        $res = ($widgetsElement->title ? $widgetsElement->renderTitle(Html::escapeHTML($widgetsElement->title)) : '') .
         $calendar->draw();
 
-        return $w->renderDiv((bool) $w->content_only, implode(' ', ['calendar', $w->class]), '', $res);
+        return $widgetsElement->renderDiv((bool) $widgetsElement->content_only, implode(' ', ['calendar', $widgetsElement->class]), '', $res);
     }
 }

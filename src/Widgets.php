@@ -19,9 +19,9 @@ use Dotclear\Plugin\widgets\WidgetsStack;
 
 class Widgets
 {
-    public static function initWidgets(WidgetsStack $w): string
+    public static function initWidgets(WidgetsStack $widgetsStack): string
     {
-        $w
+        $widgetsStack
             ->create('calendar', __('DayMode: calendar'), FrontendWidgets::calendar(...), null, __('Tickets calendar'), My::id())
             ->addTitle(__('Calendar'))
             ->setting(
