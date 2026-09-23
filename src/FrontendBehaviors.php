@@ -118,19 +118,22 @@ class FrontendBehaviors
     public static function templateBeforeBlockCode(
         bool $_today_
     ): void {
-        if ($_today_) {
-            $daymode_today        = \Dotclear\Plugin\dayMode\CoreHelper::getEarlierDate(['ts_type' => 'day']);
-            $params['post_year']  = $daymode_today->year();
-            $params['post_month'] = $daymode_today->month();
-            $params['post_day']   = $daymode_today->day();
-            $params['limit']      = null;
-            unset($params['limit'], $daymode_today);
-        } elseif (App::frontend()->context()->exists('day') && App::frontend()->context()->day instanceof MetaRecord) {
-            $params['post_year']  = App::frontend()->context()->day->year();
-            $params['post_month'] = App::frontend()->context()->day->month();
-            $params['post_day']   = App::frontend()->context()->day->day();
-            $params['limit']      = null;
-            unset($params['limit']);
+        global $params; // @phpcode-remove
+        if (is_array($params)) {
+            if ($_today_) {
+                $daymode_today        = \Dotclear\Plugin\dayMode\CoreHelper::getEarlierDate(['ts_type' => 'day']);
+                $params['post_year']  = $daymode_today->year();
+                $params['post_month'] = $daymode_today->month();
+                $params['post_day']   = $daymode_today->day();
+                $params['limit']      = null;
+                unset($params['limit'], $daymode_today);
+            } elseif (App::frontend()->context()->exists('day') && App::frontend()->context()->day instanceof MetaRecord) {
+                $params['post_year']  = App::frontend()->context()->day->year();
+                $params['post_month'] = App::frontend()->context()->day->month();
+                $params['post_day']   = App::frontend()->context()->day->day();
+                $params['limit']      = null;
+                unset($params['limit']);
+            }
         }
     }
 }
