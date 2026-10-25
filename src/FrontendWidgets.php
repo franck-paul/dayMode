@@ -28,7 +28,7 @@ class FrontendWidgets
             return '';
         }
 
-        if ($widgetsElement->offline) {
+        if ($widgetsElement->isOffline()) {
             return '';
         }
 
@@ -36,7 +36,7 @@ class FrontendWidgets
             return '';
         }
 
-        if ($widgetsElement->homeonly == 3 && !App::url()->isType('archive')) {
+        if ($widgetsElement->getHomeOnly() === 3 && !App::url()->isType('archive')) {
             return '';
         }
 
@@ -44,9 +44,9 @@ class FrontendWidgets
 
         $calendar->weekstart = is_numeric($widgetsElement->get('weekstart')) ? (int) $widgetsElement->get('weekstart') : 0;
 
-        $res = ($widgetsElement->title ? $widgetsElement->renderTitle(Html::escapeHTML($widgetsElement->title)) : '') .
+        $res = ($widgetsElement->getTitle() !== '' ? $widgetsElement->renderTitle(Html::escapeHTML($widgetsElement->getTitle())) : '') .
         $calendar->draw();
 
-        return $widgetsElement->renderDiv((bool) $widgetsElement->content_only, implode(' ', ['calendar', $widgetsElement->class]), '', $res);
+        return $widgetsElement->renderDiv($widgetsElement->getContentOnly(), implode(' ', ['calendar', $widgetsElement->getClass()]), '', $res);
     }
 }
