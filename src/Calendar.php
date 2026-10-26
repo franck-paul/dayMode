@@ -77,7 +77,7 @@ class Calendar
         }
 
         $url        = $month_dates->url();
-        $time       = (int) strtotime((string) $dt);
+        $time       = (int) strtotime($dt);
         $this->base = [
             'dt'    => date('Y-m-01 00:00:00', $time),
             'url'   => $url,
