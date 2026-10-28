@@ -156,7 +156,7 @@ class Calendar
                 $dstart = false;
             }
 
-            if (in_array(sprintf('%4d-%02d-%02d 00:00:00', (int) $y, (int) $m, $d), $this->dts)) {
+            if (in_array(sprintf('%4d-%02d-%02d 00:00:00', (int) $y, (int) $m, $d), $this->dts, true)) {
                 $url  = $this->base['url'] . '/' . sprintf('%02d', $d);
                 $link = '<a href="' . $url . '">%s</a>';
             } else {
