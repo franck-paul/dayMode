@@ -17,11 +17,10 @@ namespace Dotclear\Plugin\dayMode;
 
 use Dotclear\App;
 use Dotclear\Database\MetaRecord;
+use Dotclear\Database\Statement\JoinStatement;
+use Dotclear\Database\Statement\SelectStatement;
 use Dotclear\Schema\Extension\Dates;
 
-/**
- * @todo switch to SqlStatement
- */
 class CoreHelper
 {
     /**
@@ -31,51 +30,48 @@ class CoreHelper
      */
     public static function getEarlierDate(array $params = []): MetaRecord
     {
-        $catReq = '';
-        $dt_f   = isset($params['ts_type']) && $params['ts_type'] === 'day' ? '%Y-%m-%d 00:00:00' : '%Y-%m-%d %H:%M:%S';
+        $dt_f = isset($params['ts_type']) && $params['ts_type'] === 'day' ? '%Y-%m-%d 00:00:00' : '%Y-%m-%d %H:%M:%S';
+
+        $sql = new SelectStatement();
+        $sql
+            ->distinct()
+            ->column($sql->dateFormat($sql->max('P.post_dt'), $dt_f) . ' AS dt')
+            ->from($sql->as(App::db()->con()->prefix() . 'post', 'P'))
+            ->join(
+                (new JoinStatement())
+                    ->left()
+                    ->from($sql->as(App::db()->con()->prefix() . 'category', 'C'))
+                    ->on('P.cat_id = C.cat_id')
+                    ->statement()
+            )
+            ->where('P.blog_id = ' . $sql->quote(App::blog()->id()));
 
         if (!empty($params['cat_id'])) {
-            $catReq = 'AND P.cat_id = ' . (int) $params['cat_id'] . ' ';
-        } elseif (!empty($params['cat_url'])) {
-            $catReq = "AND C.cat_url = '" . App::db()->con()->escapeStr($params['cat_url']) . "' ";
-        }
-
-        $strReq = 'SELECT DISTINCT(' . App::db()->con()->dateFormat('MAX(post_dt)', $dt_f) . ') AS dt ' .
-                'FROM ' . App::db()->con()->prefix() . 'post P LEFT JOIN ' .
-                App::db()->con()->prefix() . 'category C ' .
-                'ON P.cat_id = C.cat_id ' .
-                "WHERE P.blog_id = '" . App::db()->con()->escapeStr(App::blog()->id()) . "' " .
-                $catReq;
-
-        if (!App::auth()->check('contentadmin', App::blog()->id())) {
-            $strReq .= 'AND ((post_status = 1 ';
-
-            if (App::blog()->withoutPassword()) {
-                $strReq .= 'AND post_password IS NULL ';
-            }
-
-            $strReq .= ') ';
-
-            if (App::auth()->userID()) {
-                $strReq .= "OR P.user_id = '" . App::db()->con()->escapeStr(App::auth()->userID()) . "')";
-            } else {
-                $strReq .= ') ';
-            }
-        }
-
-        if (!empty($params['post_type'])) {
-            $strReq .= "AND post_type = '" . App::db()->con()->escapeStr($params['post_type']) . "' ";
-        }
-
-        if (!empty($params['cat_id'])) {
-            $strReq .= 'AND P.cat_id = ' . (int) $params['cat_id'] . ' ';
+            $sql->and('P.cat_id = ' . (int) $params['cat_id']);
         }
 
         if (!empty($params['cat_url'])) {
-            $strReq .= "AND C.cat_url = '" . App::db()->con()->escapeStr($params['cat_url']) . "' ";
+            $sql->and('C.cat_url = ' . $sql->quote($params['cat_url']));
         }
 
-        $metaRecord = new MetaRecord(App::db()->con()->select($strReq));
+        if (!App::auth()->check('contentadmin', App::blog()->id())) {
+            $statusCondition = 'P.post_status = 1';
+            if (App::blog()->withoutPassword()) {
+                $statusCondition .= ' AND P.post_password IS NULL';
+            }
+
+            $conditions = ['(' . $statusCondition . ')'];
+            if (App::auth()->userID()) {
+                $conditions[] = 'P.user_id = ' . $sql->quote(App::auth()->userID());
+            }
+            $sql->and('(' . implode(' OR ', $conditions) . ')');
+        }
+
+        if (!empty($params['post_type'])) {
+            $sql->and('P.post_type = ' . $sql->quote($params['post_type']));
+        }
+
+        $metaRecord = $sql->select() ?? MetaRecord::newFromArray([]);
         $metaRecord->extend(Dates::class);
 
         return $metaRecord;
