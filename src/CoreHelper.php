@@ -64,6 +64,7 @@ class CoreHelper
             if (App::auth()->userID()) {
                 $conditions[] = 'P.user_id = ' . $sql->quote(App::auth()->userID());
             }
+
             $sql->and('(' . implode(' OR ', $conditions) . ')');
         }
 

@@ -126,7 +126,7 @@ class Calendar
         $first_ts = self::SUNDAY_TS + ($this->weekstart * 86400);
         $last_ts  = $first_ts       + (6 * 86400);
         $first    = date('w', $this->base['ts']);
-        $first    = ($first == 0) ? 7 : $first;
+        $first    = ((int) $first === 0) ? 7 : (int) $first;
         $first -= $this->weekstart;
         $limit = date('t', $this->base['ts']);
 
@@ -148,7 +148,7 @@ class Calendar
                 $res .= '<tr>';
             }
 
-            if ($i == $first) {
+            if ($i === $first) {
                 $dstart = true;
             }
 
