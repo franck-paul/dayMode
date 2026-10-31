@@ -130,7 +130,7 @@ class FrontendBehaviors
             $params['post_day']   = $daymode_today->day();
             $params['limit']      = null;
             unset($params['limit'], $daymode_today);
-        } elseif (App::frontend()->context()->exists('day') && App::frontend()->context()->day instanceof MetaRecord) {
+        } elseif (App::frontend()->context()->exists('day') && App::frontend()->context()->day instanceof \Dotclear\Database\MetaRecord) {
             $params['post_year']  = App::frontend()->context()->day->year();
             $params['post_month'] = App::frontend()->context()->day->month();
             $params['post_day']   = App::frontend()->context()->day->day();
