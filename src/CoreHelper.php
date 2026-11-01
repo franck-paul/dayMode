@@ -61,7 +61,7 @@ class CoreHelper
             }
 
             $conditions = ['(' . $statusCondition . ')'];
-            if (App::auth()->userID()) {
+            if (App::auth()->userID() !== '') {
                 $conditions[] = 'P.user_id = ' . $sql->quote(App::auth()->userID());
             }
 

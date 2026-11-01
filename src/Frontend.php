@@ -34,7 +34,7 @@ class Frontend
         }
 
         $settings = My::settings();
-        if (!$settings->getBool('daymode_active')) {
+        if (!$settings->getBool('daymode_active', false)) {
             return false;
         }
 
