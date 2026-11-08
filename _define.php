@@ -17,9 +17,9 @@ if (isset($this) && is_object($this) && method_exists($this, 'registerModule') &
         'dayMode',
         'Provides daily archives and an associated calendar widget',
         'Pep and contributors',
-        '8.0',
+        '9.0',
         [
-            'date'     => '2026-08-03T09:50:24+0200',
+            'date'     => '2026-11-08T10:13:03+0100',
             'requires' => [
                 ['core', '2.40'],
                 ['TemplateHelper'],
